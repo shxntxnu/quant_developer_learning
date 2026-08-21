@@ -33,6 +33,8 @@ graph TD
         M[MathLib.dll] --> Main[main.exe]
         YTM[calculateYTMYield.dll] --> Main
         ZC[calculateZeroCouponYield.dll] --> Main
+        ADF[calculateADF.dll] --> Main
+        COINT[calculateCointegration.dll] --> Main
         YC[calculateYieldCurve.dll (Upcoming)] -.-> Main
     end
 
@@ -47,20 +49,26 @@ graph TD
 ### Current Implemented Components
 
 #### 1. C++ High-Performance Dynamic Link Libraries (`functions/`)
-* **`MathLib.dll` ([MathLib.h](file:///d:/Documents/_MyStuff/Projects/quant_developer_learning/Algorithmic%20Trading%20Machine%20Learning%20Strategies/functions/MathLib.h) / [MathLib.cpp](file:///d:/Documents/_MyStuff/Projects/quant_developer_learning/Algorithmic%20Trading%20Machine%20Learning%20Strategies/functions/MathLib.cpp)):**
+* **`MathLib.dll` ([include/MathLib.h](file:///d:/Documents/_MyStuff/Projects/quant_developer_learning/Algorithmic%20Trading%20Machine%20Learning%20Strategies/functions/include/MathLib.h) / [src/MathLib.cpp](file:///d:/Documents/_MyStuff/Projects/quant_developer_learning/Algorithmic%20Trading%20Machine%20Learning%20Strategies/functions/src/MathLib.cpp)):**
   - Basic math arithmetic.
   - Present Value of Geometric Annuities with growth and discount rate handling.
-* **`calculateYTMYield.dll` ([calculateYTMYield.h](file:///d:/Documents/_MyStuff/Projects/quant_developer_learning/Algorithmic%20Trading%20Machine%20Learning%20Strategies/functions/calculateYTMYield.h) / [calculateYTMYield.cpp](file:///d:/Documents/_MyStuff/Projects/quant_developer_learning/Algorithmic%20Trading%20Machine%20Learning%20Strategies/functions/calculateYTMYield.cpp)):**
+* **`calculateYTMYield.dll` ([include/calculateYTMYield.h](file:///d:/Documents/_MyStuff/Projects/quant_developer_learning/Algorithmic%20Trading%20Machine%20Learning%20Strategies/functions/include/calculateYTMYield.h) / [src/calculateYTMYield.cpp](file:///d:/Documents/_MyStuff/Projects/quant_developer_learning/Algorithmic%20Trading%20Machine%20Learning%20Strategies/functions/src/calculateYTMYield.cpp)):**
   - Analytical bond pricing for coupon-bearing bonds with arbitrary payment frequencies (annual, semi-annual, quarterly).
   - High-precision numerical Yield to Maturity (YTM) solver using the **Newton-Raphson** root-finding method.
-* **`calculateZeroCouponYield.dll` ([calculateZeroCouponYield.h](file:///d:/Documents/_MyStuff/Projects/quant_developer_learning/Algorithmic%20Trading%20Machine%20Learning%20Strategies/functions/calculateZeroCouponYield.h) / [calculateZeroCouponYield.cpp](file:///d:/Documents/_MyStuff/Projects/quant_developer_learning/Algorithmic%20Trading%20Machine%20Learning%20Strategies/functions/calculateZeroCouponYield.cpp)):**
+* **`calculateZeroCouponYield.dll` ([include/calculateZeroCouponYield.h](file:///d:/Documents/_MyStuff/Projects/quant_developer_learning/Algorithmic%20Trading%20Machine%20Learning%20Strategies/functions/include/calculateZeroCouponYield.h) / [src/calculateZeroCouponYield.cpp](file:///d:/Documents/_MyStuff/Projects/quant_developer_learning/Algorithmic%20Trading%20Machine%20Learning%20Strategies/functions/src/calculateZeroCouponYield.cpp)):**
   - Analytical zero-coupon bond pricing.
   - Annual compounding spot yield solver: $y = (F/P)^{1/T} - 1$.
   - Continuously compounded spot yield solver: $y_{\text{cont}} = \ln(F/P) / T$.
+* **`calculateADF.dll` ([include/calculateADF.h](file:///d:/Documents/_MyStuff/Projects/quant_developer_learning/Algorithmic%20Trading%20Machine%20Learning%20Strategies/functions/include/calculateADF.h) / [src/calculateADF.cpp](file:///d:/Documents/_MyStuff/Projects/quant_developer_learning/Algorithmic%20Trading%20Machine%20Learning%20Strategies/functions/src/calculateADF.cpp)):**
+  - Augmented Dickey-Fuller (ADF) unit root stationarity test via OLS regression.
+  - Computes t-statistics against MacKinnon asymptotic critical values (1%, 5%, 10%).
+* **`calculateCointegration.dll` ([include/calculateCointegration.h](file:///d:/Documents/_MyStuff/Projects/quant_developer_learning/Algorithmic%20Trading%20Machine%20Learning%20Strategies/functions/include/calculateCointegration.h) / [src/calculateCointegration.cpp](file:///d:/Documents/_MyStuff/Projects/quant_developer_learning/Algorithmic%20Trading%20Machine%20Learning%20Strategies/functions/src/calculateCointegration.cpp)):**
+  - Engle-Granger Two-Step Cointegration Test for statistical arbitrage pairs trading.
+  - Computes optimal hedge ratio $\beta$, intercept $\alpha$, $R^2$, and residual spread unit root test against Engle-Yoo critical values.
 * **`main.exe` ([main.cpp](file:///d:/Documents/_MyStuff/Projects/quant_developer_learning/Algorithmic%20Trading%20Machine%20Learning%20Strategies/functions/main.cpp)):**
-  - Harness executable dynamically linking all three DLLs and verifying calculations.
+  - Harness executable dynamically linking all 5 DLLs from `bin/` and verifying calculations.
 * **Build Automation ([build.bat](file:///d:/Documents/_MyStuff/Projects/quant_developer_learning/Algorithmic%20Trading%20Machine%20Learning%20Strategies/functions/build.bat) & [Makefile](file:///d:/Documents/_MyStuff/Projects/quant_developer_learning/Algorithmic%20Trading%20Machine%20Learning%20Strategies/functions/Makefile)):**
-  - Single-click compiler automation with `g++` on Windows.
+  - Single-click compiler automation with `g++` on Windows outputting to `bin/`.
 
 #### 2. Machine Learning Trading Strategy ([Algorithmic_Trading_Machine_Learning_Quant_Strategies.ipynb](file:///d:/Documents/_MyStuff/Projects/quant_developer_learning/Algorithmic%20Trading%20Machine%20Learning%20Strategies/Algorithmic_Trading_Machine_Learning_Quant_Strategies.ipynb))
 * S&P 500 multi-asset automated historical data pipeline.
@@ -77,10 +85,7 @@ graph TD
    - Bootstrapping zero rates from a collection of coupon bonds and money market instruments.
    - Parametric term structure modeling (Nelson-Siegel and Nelson-Siegel-Svensson models).
    - Cubic Spline and Linear yield interpolation across tenors.
-2. **Stationarity & Statistical Arbitrage Suite (`augmentedDickyFuller`):**
-   - Augmented Dickey-Fuller (ADF) test implementation for mean-reversion detection.
-   - Engle-Granger two-step cointegration testing for pairs trading.
-3. **C++ & Python Bindings (ctypes / pybind11):**
+2. **C++ & Python Bindings (ctypes / pybind11):**
    - Direct execution of C++ DLL pricing engines inside Python trading loops for ultra-fast backtesting.
 
 ---
@@ -155,7 +160,7 @@ graph TD
 
 To maintain clean modular architecture, follow the project's standard 3-step pattern when adding any new C++ calculation module:
 
-#### Step 1: Create Header `MyComponent.h`
+#### Step 1: Create Header `include/MyComponent.h`
 ```cpp
 #ifndef MYCOMPONENT_H
 #define MYCOMPONENT_H
@@ -183,7 +188,7 @@ MYCOMPONENT_API double my_quant_function(double input_param);
 #endif // MYCOMPONENT_H
 ```
 
-#### Step 2: Create Implementation `MyComponent.cpp`
+#### Step 2: Create Implementation `src/MyComponent.cpp`
 ```cpp
 #include "MyComponent.h"
 
@@ -194,8 +199,8 @@ MYCOMPONENT_API double my_quant_function(double input_param) {
 
 #### Step 3: Add to `build.bat`
 ```bat
-g++ -DMYCOMPONENT_EXPORTS -shared -o MyComponent.dll MyComponent.cpp -Wl,--out-implib,libMyComponent.a
-g++ -o main.exe main.cpp -L. -lMathLib -lcalculateYTMYield -lcalculateZeroCouponYield -lMyComponent
+g++ -Iinclude -DMYCOMPONENT_EXPORTS -shared -o bin/MyComponent.dll src/MyComponent.cpp -Wl,--out-implib,bin/libMyComponent.a
+g++ -Iinclude -o bin/main.exe main.cpp -Lbin -lMathLib -lcalculateYTMYield -lcalculateZeroCouponYield -lcalculateADF -lcalculateCointegration -lMyComponent
 ```
 
 ---
@@ -215,12 +220,28 @@ quant_developer_learning/
 │   ├── simulated_5min_data.csv                         # Intraday 5-min simulated pricing
 │   ├── simulated_daily_data.csv                        # Daily simulated pricing
 │   └── functions/                                      # C++ DLL Subsystem
-│       ├── MathLib.h / MathLib.cpp                     # General financial math DLL
-│       ├── calculateYTMYield.h / .cpp                  # Coupon bond YTM solver DLL
-│       ├── calculateZeroCouponYield.h / .cpp           # Zero-coupon spot yield DLL
-│       ├── calculateYieldCurve.h                       # Forwarding header alias
+│       ├── include/                                    # C++ Header Files (*.h)
+│       │   ├── MathLib.h
+│       │   ├── calculateYTMYield.h
+│       │   ├── calculateZeroCouponYield.h
+│       │   ├── calculateADF.h
+│       │   ├── calculateCointegration.h
+│       │   └── calculateYieldCurve.h
+│       ├── src/                                        # C++ Implementation Files (*.cpp)
+│       │   ├── MathLib.cpp
+│       │   ├── calculateYTMYield.cpp
+│       │   ├── calculateZeroCouponYield.cpp
+│       │   ├── calculateADF.cpp
+│       │   └── calculateCointegration.cpp
+│       ├── bin/                                        # Compiled Binaries & Libraries (*.dll, *.a, *.exe)
+│       │   ├── MathLib.dll / libMathLib.a
+│       │   ├── calculateYTMYield.dll / libcalculateYTMYield.a
+│       │   ├── calculateZeroCouponYield.dll / libcalculateZeroCouponYield.a
+│       │   ├── calculateADF.dll / libcalculateADF.a
+│       │   ├── calculateCointegration.dll / libcalculateCointegration.a
+│       │   └── main.exe
 │       ├── main.cpp                                    # Integration driver application
 │       ├── build.bat                                   # Windows automated build script
 │       └── Makefile                                    # Makefile for GNU Make
-└── augmentedDickyFuller/                               # ADF statistical testing module (Planned)
+└── (root resources: syllabus, roadmap tracker, venv)
 ```
