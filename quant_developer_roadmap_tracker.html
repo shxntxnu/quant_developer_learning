@@ -1,0 +1,1602 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quant Developer 12-Week Interactive Build Log & Tracker</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #0A0E17;
+            --bg-card: rgba(20, 26, 40, 0.75);
+            --bg-card-hover: rgba(28, 36, 56, 0.9);
+            --bg-drawer: #0F1422;
+            --border-color: rgba(255, 255, 255, 0.08);
+            --border-highlight: rgba(0, 242, 254, 0.3);
+            
+            --text-main: #F0F4F8;
+            --text-muted: #8E9BAE;
+            --text-dim: #5A687C;
+            
+            --accent-cyan: #00F2FE;
+            --accent-blue: #4FACFE;
+            --accent-green: #00E676;
+            --accent-purple: #9D4EDD;
+            --accent-amber: #FFB703;
+            --accent-rose: #FF4757;
+            
+            --gradient-cyan: linear-gradient(135deg, #00F2FE 0%, #4FACFE 100%);
+            --gradient-purple: linear-gradient(135deg, #9D4EDD 0%, #6E0DD0 100%);
+            --gradient-green: linear-gradient(135deg, #00E676 0%, #00B0FF 100%);
+            --gradient-amber: linear-gradient(135deg, #FFB703 0%, #FF8800 100%);
+            
+            --radius-sm: 6px;
+            --radius-md: 12px;
+            --radius-lg: 18px;
+            --shadow-glow: 0 0 25px rgba(0, 242, 254, 0.15);
+            --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-family: var(--font-sans);
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 0;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 15% 15%, rgba(0, 242, 254, 0.04) 0%, transparent 40%),
+                radial-gradient(circle at 85% 85%, rgba(157, 78, 221, 0.04) 0%, transparent 40%);
+        }
+
+        /* Container Layout */
+        .app-header {
+            background: rgba(10, 14, 23, 0.85);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: 16px 32px;
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-badge {
+            background: var(--gradient-cyan);
+            color: #000;
+            font-family: var(--font-mono);
+            font-weight: 800;
+            font-size: 14px;
+            padding: 6px 12px;
+            border-radius: var(--radius-sm);
+            letter-spacing: 1px;
+        }
+
+        .title-group h1 {
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            color: #FFF;
+        }
+
+        .title-group p {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .btn {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 8px 16px;
+            border-radius: var(--radius-sm);
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-family: var(--font-sans);
+        }
+
+        .btn:hover {
+            border-color: var(--accent-cyan);
+            background: rgba(0, 242, 254, 0.08);
+            color: var(--accent-cyan);
+        }
+
+        .btn-primary {
+            background: var(--gradient-cyan);
+            color: #000;
+            font-weight: 600;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            box-shadow: var(--shadow-glow);
+            color: #000;
+            opacity: 0.9;
+        }
+
+        /* Metrics Bar */
+        .metrics-banner {
+            max-width: 1400px;
+            margin: 24px auto;
+            padding: 0 32px;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+        }
+
+        .metric-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 20px;
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .metric-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 3px;
+            height: 100%;
+            background: var(--accent-cyan);
+        }
+
+        .metric-card.purple::before { background: var(--accent-purple); }
+        .metric-card.green::before { background: var(--accent-green); }
+        .metric-card.amber::before { background: var(--accent-amber); }
+
+        .metric-label {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+            font-weight: 600;
+        }
+
+        .metric-value {
+            font-size: 28px;
+            font-weight: 800;
+            font-family: var(--font-mono);
+            color: #FFF;
+        }
+
+        .metric-sub {
+            font-size: 11px;
+            color: var(--text-dim);
+            margin-top: 4px;
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: var(--gradient-cyan);
+            width: 0%;
+            transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Controls & Filter Bar */
+        .controls-section {
+            max-width: 1400px;
+            margin: 0 auto 24px auto;
+            padding: 0 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .filter-tabs {
+            display: flex;
+            background: rgba(15, 20, 34, 0.8);
+            padding: 4px;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-color);
+            gap: 4px;
+            overflow-x: auto;
+        }
+
+        .tab-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            padding: 8px 16px;
+            border-radius: var(--radius-sm);
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .tab-btn:hover {
+            color: var(--text-main);
+        }
+
+        .tab-btn.active {
+            background: rgba(0, 242, 254, 0.12);
+            color: var(--accent-cyan);
+            font-weight: 600;
+            border: 1px solid rgba(0, 242, 254, 0.25);
+        }
+
+        .search-box {
+            position: relative;
+            min-width: 260px;
+        }
+
+        .search-input {
+            width: 100%;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 10px 16px 10px 38px;
+            color: var(--text-main);
+            font-size: 13px;
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        .search-input:focus {
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 12px rgba(0, 242, 254, 0.2);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-dim);
+            font-size: 14px;
+        }
+
+        /* Timeline Week Grid */
+        .timeline-container {
+            max-width: 1400px;
+            margin: 0 auto 60px auto;
+            padding: 0 32px;
+        }
+
+        .stage-group {
+            margin-bottom: 36px;
+        }
+
+        .stage-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 18px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .stage-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text-main);
+            letter-spacing: -0.3px;
+        }
+
+        .stage-badge {
+            font-size: 11px;
+            font-family: var(--font-mono);
+            padding: 3px 8px;
+            border-radius: 20px;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        .badge-s1 { background: rgba(0, 242, 254, 0.15); color: var(--accent-cyan); border: 1px solid rgba(0, 242, 254, 0.3); }
+        .badge-s2 { background: rgba(157, 78, 221, 0.15); color: var(--accent-purple); border: 1px solid rgba(157, 78, 221, 0.3); }
+        .badge-s3 { background: rgba(0, 246, 118, 0.15); color: var(--accent-green); border: 1px solid rgba(0, 246, 118, 0.3); }
+        .badge-s4 { background: rgba(255, 183, 3, 0.15); color: var(--accent-amber); border: 1px solid rgba(255, 183, 3, 0.3); }
+
+        .weeks-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 20px;
+        }
+
+        .week-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 24px;
+            cursor: pointer;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .week-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent-cyan);
+            background: var(--bg-card-hover);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), var(--shadow-glow);
+        }
+
+        .week-card-top {
+            margin-bottom: 16px;
+        }
+
+        .week-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .week-number {
+            font-family: var(--font-mono);
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--accent-cyan);
+            text-transform: uppercase;
+        }
+
+        .status-pill {
+            font-size: 10px;
+            font-weight: 600;
+            padding: 2px 8px;
+            border-radius: 12px;
+            text-transform: uppercase;
+        }
+
+        .status-not-started { background: rgba(255, 255, 255, 0.06); color: var(--text-muted); }
+        .status-in-progress { background: rgba(255, 183, 3, 0.15); color: var(--accent-amber); }
+        .status-completed { background: rgba(0, 230, 118, 0.15); color: var(--accent-green); }
+
+        .week-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #FFF;
+            margin-bottom: 8px;
+            line-height: 1.4;
+        }
+
+        .week-desc {
+            font-size: 12px;
+            color: var(--text-muted);
+            line-height: 1.5;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .week-card-bottom {
+            margin-top: 20px;
+            padding-top: 14px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .task-counter {
+            font-size: 12px;
+            color: var(--text-muted);
+            font-family: var(--font-mono);
+        }
+
+        .drill-btn {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--accent-cyan);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        /* Drawer / Modal for Detailed Drill-Down */
+        .drawer-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(5, 7, 12, 0.75);
+            backdrop-filter: blur(8px);
+            z-index: 200;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .drawer-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .drawer {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 800px;
+            max-width: 90vw;
+            height: 100vh;
+            background: var(--bg-drawer);
+            border-left: 1px solid var(--border-color);
+            z-index: 201;
+            transform: translateX(100%);
+            transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+            display: flex;
+            flex-direction: column;
+            box-shadow: -20px 0 50px rgba(0, 0, 0, 0.6);
+        }
+
+        .drawer-overlay.active .drawer {
+            transform: translateX(0);
+        }
+
+        .drawer-header {
+            padding: 24px 32px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            background: rgba(10, 14, 23, 0.9);
+        }
+
+        .drawer-title-area h2 {
+            font-size: 22px;
+            font-weight: 800;
+            color: #FFF;
+            margin-bottom: 4px;
+        }
+
+        .drawer-subtitle {
+            font-size: 13px;
+            color: var(--accent-cyan);
+            font-family: var(--font-mono);
+        }
+
+        .close-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            transition: all 0.2s ease;
+        }
+
+        .close-btn:hover {
+            background: rgba(255, 71, 87, 0.2);
+            color: var(--accent-rose);
+            border-color: var(--accent-rose);
+        }
+
+        .drawer-content {
+            padding: 32px;
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        .drawer-tabs {
+            display: flex;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 24px;
+            gap: 20px;
+        }
+
+        .dtab-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            padding: 10px 0;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s ease;
+        }
+
+        .dtab-btn.active {
+            color: var(--accent-cyan);
+            border-bottom-color: var(--accent-cyan);
+        }
+
+        .tab-pane {
+            display: none;
+        }
+
+        .tab-pane.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Detail Blocks inside Drawer */
+        .section-block {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .block-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: #FFF;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .resource-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        .resource-item:last-child {
+            border-bottom: none;
+        }
+
+        .resource-type {
+            font-family: var(--font-mono);
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 4px;
+            background: rgba(255, 255, 255, 0.08);
+            color: var(--accent-cyan);
+            font-weight: 600;
+            text-transform: uppercase;
+            white-space: nowrap;
+            margin-top: 2px;
+        }
+
+        .resource-info h4 {
+            font-size: 13px;
+            font-weight: 600;
+            color: #FFF;
+        }
+
+        .resource-info p {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        /* Interactive Task List */
+        .task-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 12px;
+            background: rgba(10, 14, 23, 0.4);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            margin-bottom: 10px;
+            transition: all 0.2s ease;
+        }
+
+        .task-item:hover {
+            border-color: rgba(0, 242, 254, 0.3);
+            background: rgba(0, 242, 254, 0.03);
+        }
+
+        .task-item input[type="checkbox"] {
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            border: 2px solid var(--text-dim);
+            border-radius: 4px;
+            outline: none;
+            cursor: pointer;
+            position: relative;
+            margin-top: 2px;
+            flex-shrink: 0;
+            transition: all 0.2s ease;
+        }
+
+        .task-item input[type="checkbox"]:checked {
+            background: var(--accent-cyan);
+            border-color: var(--accent-cyan);
+        }
+
+        .task-item input[type="checkbox"]:checked::after {
+            content: '✓';
+            position: absolute;
+            color: #000;
+            font-size: 12px;
+            font-weight: 900;
+            top: -2px;
+            left: 3px;
+        }
+
+        .task-label {
+            font-size: 13px;
+            color: var(--text-main);
+            cursor: pointer;
+        }
+
+        .task-item.completed .task-label {
+            text-decoration: line-through;
+            color: var(--text-dim);
+        }
+
+        /* Quiz Flashcards */
+        .flashcard {
+            background: rgba(10, 14, 23, 0.6);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 18px;
+            margin-bottom: 16px;
+        }
+
+        .flashcard-q {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--accent-amber);
+            margin-bottom: 10px;
+            display: flex;
+            gap: 8px;
+        }
+
+        .flashcard-a {
+            font-size: 12px;
+            color: var(--text-main);
+            background: rgba(255, 255, 255, 0.03);
+            padding: 12px;
+            border-radius: var(--radius-sm);
+            border-left: 3px solid var(--accent-cyan);
+            display: none;
+            line-height: 1.6;
+        }
+
+        .flashcard-a.show {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .reveal-btn {
+            background: transparent;
+            border: 1px dashed var(--accent-amber);
+            color: var(--accent-amber);
+            padding: 4px 10px;
+            border-radius: var(--radius-sm);
+            font-size: 11px;
+            cursor: pointer;
+            margin-top: 8px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .reveal-btn:hover {
+            background: rgba(255, 183, 3, 0.15);
+        }
+
+        /* Build Log Notes */
+        .notes-textarea {
+            width: 100%;
+            height: 140px;
+            background: rgba(10, 14, 23, 0.7);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 14px;
+            color: var(--text-main);
+            font-family: var(--font-mono);
+            font-size: 12px;
+            outline: none;
+            resize: vertical;
+            line-height: 1.5;
+        }
+
+        .notes-textarea:focus {
+            border-color: var(--accent-cyan);
+        }
+
+        /* Architecture Map Section */
+        .arch-section {
+            max-width: 1400px;
+            margin: 40px auto;
+            padding: 0 32px;
+        }
+
+        .arch-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 28px;
+        }
+
+        .arch-diagram {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+            padding: 20px 0;
+        }
+
+        .arch-node {
+            background: rgba(10, 14, 23, 0.8);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 16px 20px;
+            flex: 1;
+            min-width: 180px;
+            text-align: center;
+            position: relative;
+        }
+
+        .arch-node.active {
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 15px rgba(0, 242, 254, 0.2);
+        }
+
+        .arch-node h4 {
+            font-size: 13px;
+            font-weight: 700;
+            color: #FFF;
+            margin-bottom: 4px;
+        }
+
+        .arch-node p {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        .arch-arrow {
+            color: var(--accent-cyan);
+            font-size: 18px;
+            font-weight: 900;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .app-header, .metrics-banner, .controls-section, .timeline-container, .arch-section {
+                padding: 16px;
+            }
+            .drawer {
+                width: 100vw;
+                max-width: 100vw;
+            }
+            .arch-diagram {
+                flex-direction: column;
+            }
+            .arch-arrow {
+                transform: rotate(90deg);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- App Header -->
+    <header class="app-header">
+        <div class="header-content">
+            <div class="logo-area">
+                <span class="logo-badge">QUANT LOG</span>
+                <div class="title-group">
+                    <h1>12-Week Quant Developer Roadmap</h1>
+                    <p>Interactive Build Log & Dynamic Progress Tracker</p>
+                </div>
+            </div>
+            <div class="header-actions">
+                <button class="btn" onclick="exportData()">
+                    <span>💾</span> Export JSON
+                </button>
+                <button class="btn" onclick="document.getElementById('importFile').click()">
+                    <span>📂</span> Import JSON
+                </button>
+                <input type="file" id="importFile" style="display:none" onchange="importData(event)">
+                <button class="btn btn-primary" onclick="resetProgress()">
+                    <span>🔄</span> Reset Progress
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Metrics Banner -->
+    <section class="metrics-banner">
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <div class="metric-label">Overall Completion</div>
+                <div class="metric-value" id="overallPercent">0%</div>
+                <div class="progress-bar-container">
+                    <div class="progress-bar-fill" id="overallProgressBar"></div>
+                </div>
+                <div class="metric-sub" id="tasksSummaryText">0 / 0 Tasks Completed</div>
+            </div>
+            <div class="metric-card purple">
+                <div class="metric-label">Active Stage</div>
+                <div class="metric-value" id="activeStageText" style="font-size: 20px;">Stage 1</div>
+                <div class="metric-sub">Foundations & Vectorisation</div>
+            </div>
+            <div class="metric-card green">
+                <div class="metric-label">Checkpoints Passed</div>
+                <div class="metric-value" id="checkpointsPassed">0 / 4</div>
+                <div class="metric-sub">Spine System Milestones</div>
+            </div>
+            <div class="metric-card amber">
+                <div class="metric-label">Self-Checks Answered</div>
+                <div class="metric-value" id="selfChecksCount">0 / 12</div>
+                <div class="metric-sub">Quant Interview Flashcards</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Controls & Filters -->
+    <section class="controls-section">
+        <div class="filter-tabs">
+            <button class="tab-btn active" onclick="filterStage('all', this)">All Stages</button>
+            <button class="tab-btn" onclick="filterStage('s1', this)">Stage 1: Foundations</button>
+            <button class="tab-btn" onclick="filterStage('s2', this)">Stage 2: FinEng & Risk</button>
+            <button class="tab-btn" onclick="filterStage('s3', this)">Stage 3: Systems & C++</button>
+            <button class="tab-btn" onclick="filterStage('s4', this)">Stage 4: Quant Interview</button>
+        </div>
+
+        <div class="search-box">
+            <span class="search-icon">🔍</span>
+            <input type="text" class="search-input" id="searchInput" placeholder="Search topics, books, LeetCode..." oninput="handleSearch()">
+        </div>
+    </section>
+
+    <!-- Timeline Grid -->
+    <main class="timeline-container" id="timelineContainer">
+        <!-- Dynamically rendered via JS -->
+    </main>
+
+    <!-- Spine System Architecture Visualizer -->
+    <section class="arch-section">
+        <div class="arch-card">
+            <div class="block-title">
+                <span>⚡</span> Spine Project Evolution Map (Trading System Pipeline)
+            </div>
+            <p style="font-size: 13px; color: var(--text-muted);">
+                How your 12-week roadmap directly transforms your live-capital trading system into a high-performance, defensible quant engine.
+            </p>
+            <div class="arch-diagram">
+                <div class="arch-node">
+                    <h4>Market Data Ingestion</h4>
+                    <p>DuckDB / Parquet Tick Store (Week 8)</p>
+                </div>
+                <div class="arch-arrow">→</div>
+                <div class="arch-node">
+                    <h4>Signal Generation</h4>
+                    <p>GARCH(1,1) + Fama-French (Weeks 1-2)</p>
+                </div>
+                <div class="arch-arrow">→</div>
+                <div class="arch-node active">
+                    <h4>C++ Hot Path Engine</h4>
+                    <p>pybind11 Rolling Calculation (Week 7)</p>
+                </div>
+                <div class="arch-arrow">→</div>
+                <div class="arch-node">
+                    <h4>Risk & Vol Filter</h4>
+                    <p>VaR & Sharpe Module (Week 6)</p>
+                </div>
+                <div class="arch-arrow">→</div>
+                <div class="arch-node">
+                    <h4>Execution Venue</h4>
+                    <p>Interactive Brokers API / CI (Week 9)</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Drawer / Modal for Deep Drill-Down -->
+    <div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer(event)">
+        <div class="drawer" onclick="event.stopPropagation()">
+            <div class="drawer-header">
+                <div class="drawer-title-area">
+                    <h2 id="drawerTitle">Week Details</h2>
+                    <div class="drawer-subtitle" id="drawerSubtitle">Stage 1 - Quant & CS Foundations</div>
+                </div>
+                <button class="close-btn" onclick="closeDrawerForce()">✕</button>
+            </div>
+
+            <div class="drawer-content">
+                <div class="drawer-tabs">
+                    <button class="dtab-btn active" onclick="switchDrawerTab('overview', this)">Overview & Resources</button>
+                    <button class="dtab-btn" onclick="switchDrawerTab('tasks', this)">Deliverables & Tasks</button>
+                    <button class="dtab-btn" onclick="switchDrawerTab('quiz', this)">Interview Self-Check</button>
+                    <button class="dtab-btn" onclick="switchDrawerTab('notes', this)">Build Log & Benchmarks</button>
+                </div>
+
+                <!-- Tab 1: Overview & Resources -->
+                <div class="tab-pane active" id="dpane-overview">
+                    <div class="section-block">
+                        <div class="block-title">🎯 Core Objectives</div>
+                        <p id="drawerDesc" style="font-size: 13px; color: var(--text-main); line-height: 1.6;"></p>
+                    </div>
+
+                    <div class="section-block">
+                        <div class="block-title">📚 Hand-Curated Resource Vault</div>
+                        <div id="drawerResources"></div>
+                    </div>
+                </div>
+
+                <!-- Tab 2: Deliverables & Checkbox Tasks -->
+                <div class="tab-pane" id="dpane-tasks">
+                    <div class="section-block">
+                        <div class="block-title">🛠️ Spine Project Tasks & Checkpoint Increments</div>
+                        <div id="drawerTaskList"></div>
+                    </div>
+                </div>
+
+                <!-- Tab 3: Quant Interview Self-Check -->
+                <div class="tab-pane" id="dpane-quiz">
+                    <div class="section-block">
+                        <div class="block-title">🧠 Quant Interview Flashcard</div>
+                        <div id="drawerQuizArea"></div>
+                    </div>
+                </div>
+
+                <!-- Tab 4: Build Log & Benchmarks -->
+                <div class="tab-pane" id="dpane-notes">
+                    <div class="section-block">
+                        <div class="block-title">📝 Build Journal, Commit SHAs & Timing Benchmarks</div>
+                        <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 10px;">
+                            Record timing numbers (e.g. Pure Python vs Vectorized NumPy vs C++ execution speed), git commit hashes, or model notes. Automatically saved locally.
+                        </p>
+                        <textarea class="notes-textarea" id="drawerNotes" placeholder="e.g., Benchmark Result: Pure Python loop = 420ms, Vectorized NumPy = 4.2ms (100x speedup). Git commit: a1b2c3d..." oninput="saveCurrentWeekNotes()"></textarea>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Application Logic -->
+    <script>
+        // Data Structure for all 12 Weeks
+        const weeksData = [
+            {
+                id: 1,
+                stage: "s1",
+                stageName: "Stage 1 — Quant & CS Foundations",
+                title: "Time Series Analysis, Stationarity & GARCH Modeling",
+                focus: "Stationarity, ADF/KPSS Tests, ACF/PACF, GARCH(1,1)",
+                desc: "Establish mathematical rigor for return series. Understand why raw stock prices are non-stationary random walks while log returns exhibit volatility clustering, requiring GARCH modeling rather than constant volatility assumptions.",
+                resources: [
+                    { type: "Book", title: "Analysis of Financial Time Series (Ruey S. Tsay)", detail: "Chapter 2: Linear Time Series, Chapter 3: Conditional Heteroscedastic Models (pp. 109-135)" },
+                    { type: "Paper", title: "Generalized Autoregressive Conditional Heteroskedasticity", detail: "Tim Bollerslev (1986), Journal of Econometrics" },
+                    { type: "Repo/Doc", title: "arch library in Python", detail: "arch.univariate.ARCHModel & statsmodels.tsa.stattools (adfuller, kpss)" }
+                ],
+                tasks: [
+                    "Implement automated Augmented Dickey-Fuller (ADF) and KPSS stationarity tests on asset log returns in data pipeline.",
+                    "Plot Autocorrelation Function (ACF) and Partial Autocorrelation Function (PACF) to identify ARMA orders.",
+                    "Fit a GARCH(1,1) model using arch_model to extract time-varying conditional volatility σ_t.",
+                    "Compare constant rolling variance vs GARCH conditional variance in volatility forecasting."
+                ],
+                quiz: {
+                    q: "Why does your GARCH model require a weakly stationary time series, and how do you check for it in your pipeline?",
+                    a: "GARCH models the conditional variance of innovations (ε_t = σ_t * z_t). If the underlying return series contains a unit root (non-stationary mean), sample variance is infinite/undefined and parameters α_1 + β_1 won't satisfy stationarity (α_1 + β_1 < 1). In your pipeline, apply ADF (null: unit root exists) and KPSS (null: stationary) tests on log returns ln(P_t / P_{t-1}). If ADF p-value < 0.05 and KPSS p-value > 0.05, stationarity is confirmed before fitting GARCH."
+                }
+            },
+            {
+                id: 2,
+                stage: "s1",
+                stageName: "Stage 1 — Quant & CS Foundations",
+                title: "Vectorisation Discipline, NumPy Memory & Factor Covariance",
+                focus: "Vectorisation Discipline, NumPy Strides, Eigen-decomposition, PCA",
+                desc: "Eliminate Python loops from hot-path analytics. Master NumPy memory layout (C-contiguous vs Fortran) and understand how Eigen-decomposition / Principal Component Analysis (PCA) decomposes return covariance matrices into risk factors.",
+                resources: [
+                    { type: "Book", title: "Linear Algebra and Its Applications (Gilbert Strang)", detail: "Chapter 5: Eigenvalues and Eigenvectors, Chapter 6: Positive Definite Matrices" },
+                    { type: "Paper", title: "Common Risk Factors in Returns on Stocks and Bonds", detail: "Eugene F. Fama & Kenneth R. French (1993)" },
+                    { type: "Repo/Doc", title: "NumPy Internals & Memory Layout", detail: "numpy.lib.stride_tricks.sliding_window_view & numpy.linalg.eigh" }
+                ],
+                tasks: [
+                    "Identify and profile a loop-heavy rolling calculation (e.g. rolling beta or rolling covariance) in pure Python loops.",
+                    "Rewrite the calculation 100% vectorized using NumPy strides or matrix operations.",
+                    "Implement PCA-based factor risk decomposition on a portfolio returns matrix.",
+                    "Measure speedup: Record execution timing (ms) before vs after vectorization."
+                ],
+                quiz: {
+                    q: "What is the Big-O of a naive nested-loop rolling calculation over price history versus the vectorized NumPy equivalent, and what does Eigen-decomposition do to return covariance?",
+                    a: "Naive nested loop rolling window of size W over N assets for T periods is O(T * N * W). Vectorized NumPy leverages SIMD instructions and contiguous C memory buffers to reduce Python interpreter overhead, running at O(T * N * W) low-level C speed (10x-100x speedup). Eigen-decomposition Σ = V * Λ * V^T rotates the covariance matrix into uncorrelated orthogonal eigenvectors (principal components), where eigenvalues λ_i represent variance explained by each factor. Fama-French factors approximate these leading eigenvectors."
+                }
+            },
+            {
+                id: 3,
+                stage: "s1",
+                stageName: "Stage 1 — Quant & CS Foundations",
+                title: "Data Structures Screening Bar & C++ Syntax Kick-off",
+                focus: "LeetCode Arrays/HashMaps/Sliding Window, C++ Memory Model, STL",
+                desc: "Build interview fluency for 45-minute technical coding screens. Transition to C++ syntax, compilation toolchains (g++/clang/MSVC), pointers, references, and STL containers.",
+                resources: [
+                    { type: "Book", title: "Cracking the Coding Interview (Gayle Laakmann McDowell)", detail: "Chapter 1: Arrays & Strings, Chapter 2: Linked Lists, Chapter 4: Trees" },
+                    { type: "Book", title: "A Tour of C++ (Bjarne Stroustrup)", detail: "Chapters 1-4: Basics, User-Defined Types, Modularity, Containers" },
+                    { type: "LeetCode", title: "Targeted Interview Problem Set", detail: "#1 Two Sum, #15 3Sum, #239 Sliding Window Maximum, #146 LRU Cache, #102 Binary Tree Level Order" }
+                ],
+                tasks: [
+                    "Solve and time LeetCode #1, #15, #239, #146, #102 in Python/C++.",
+                    "Write a standalone C++ application that reads a CSV of prices, computes moving average via std::vector, and prints timing via std::chrono.",
+                    "Write a short formal justification note defending why GARCH and Fama-French 3-Factor were chosen over CAPM alone for your spine trading system.",
+                    "Checkpoint Stage 1 Passed: Vectorized rewrite complete + DSA screening benchmarked + Written model justification."
+                ],
+                quiz: {
+                    q: "Walk through why k-fold cross-validation is inappropriate for financial price prediction models, and what walk-forward validation does instead.",
+                    a: "K-fold cross-validation shuffles data randomly, causing severe lookahead bias because training sets contain future data points relative to validation sets (t+k used to predict t). Financial data exhibits strong temporal dependencies and non-stationarity. Walk-forward validation uses an expanding or rolling historical window (train on [0, t], test on [t+1, t+h]), strictly respecting the arrow of time to reflect real-world execution."
+                }
+            },
+            {
+                id: 4,
+                stage: "s2",
+                stageName: "Stage 2 — Financial Engineering & Instruments",
+                title: "Derivatives Fundamentals & Black-Scholes Greeks Engine",
+                focus: "Black-Scholes PDE, Analytical European Options, Greeks, Put-Call Parity",
+                desc: "Extend your asset class coverage into derivatives. Master Black-Scholes analytical solution, exact operational meaning of each Greek, and Put-Call parity validation.",
+                resources: [
+                    { type: "Book", title: "Options, Futures, and Other Derivatives (John C. Hull)", detail: "Chapter 13: Black-Scholes-Merton Model, Chapter 17: The Greek Letters" },
+                    { type: "Book", title: "Option Volatility and Pricing (Sheldon Natenberg)", detail: "Chapters 4-6: Option Values, Volatility, Risk Measures" },
+                    { type: "Repo/Doc", title: "scipy.stats.norm", detail: "Cumulative distribution functions N(d1), N(d2) for analytical pricing" }
+                ],
+                tasks: [
+                    "Implement analytical Black-Scholes pricing class for European Call and Put options in Python.",
+                    "Calculate closed-form partial derivatives for Delta (Δ), Gamma (Γ), Vega (ν), Theta (Θ), and Rho (ρ).",
+                    "Write automated test verifying Put-Call Parity: C - P = S - K * exp(-r*T) holds within 1e-6 tolerance across 1,000 randomized strike/spot pairs.",
+                    "Compare numerical finite difference Greeks vs analytical closed-form Greeks."
+                ],
+                quiz: {
+                    q: "What are the core assumptions behind Black-Scholes, and which one is most severely violated in real options markets?",
+                    a: "Core assumptions: Constant volatility σ, lognormal asset prices (geometric Brownian motion), constant risk-free rate r, no transaction costs/taxes, continuous trading, no dividends. In real markets, the constant volatility assumption fails completely, giving rise to the Volatility Smile/Skew (implied vol varies across strike K and maturity T). Fat-tailed returns (leptokurtosis) also make extreme market moves far more frequent than normal distribution predicts."
+                }
+            },
+            {
+                id: 5,
+                stage: "s2",
+                stageName: "Stage 2 — Financial Engineering & Instruments",
+                title: "Fixed Income Analytics, Yield Curves & Duration/Convexity",
+                focus: "Bond Pricing, YTM, Macaulay/Modified Duration, Convexity, DV01",
+                desc: "Understand fixed income math and interest rate sensitivity. Master why bond prices move inversely to rates and how duration + convexity provide a second-order Taylor expansion of bond price response.",
+                resources: [
+                    { type: "Book", title: "Bond Markets, Analysis, and Strategies (Frank J. Fabozzi)", detail: "Chapters 1-4: Introduction, Pricing of Bonds, Yield Measures, Price Volatility" },
+                    { type: "Book", title: "Fixed Income Securities (Bruce Tuckman & Angel Serrat)", detail: "Chapters 1-3: Discount Factors, Yields, Interest Rate Sensitivity" }
+                ],
+                tasks: [
+                    "Build a zero-coupon bond and coupon-bearing bond pricing engine from cash flows and spot curve.",
+                    "Compute Macaulay Duration, Modified Duration (D_mod = D_mac / (1 + y/m)), and Convexity (C).",
+                    "Simulate bond portfolio price change under +100 bps and -100 bps yield curve shifts, comparing linear duration estimation vs duration + convexity estimate vs exact repricing.",
+                    "Calculate DV01 (Dollar Value of a 1 basis point change in yield)."
+                ],
+                quiz: {
+                    q: "Explain duration and convexity well enough to state what happens to a bond portfolio when interest rates move by +100 bps.",
+                    a: "Modified duration D_mod measures the first derivative of bond price with respect to yield (% ΔP ≈ -D_mod * Δy). Convexity C is the second derivative (0.5 * C * (Δy)^2). For a +100 bps (+0.01) rate shift, a bond with D_mod = 7 and C = 60 loses approximately -7% + 0.5 * 60 * (0.01)^2 = -7% + 0.3% = -6.7%. Duration overestimates price loss for rate hikes and underestimates gains for rate cuts; convexity corrects for this curvature."
+                }
+            },
+            {
+                id: 6,
+                stage: "s2",
+                stageName: "Stage 2 — Financial Engineering & Instruments",
+                title: "Risk Metrics Module & Backtest Lookahead-Bias Audit",
+                focus: "Value at Risk (VaR), Sharpe/Sortino, Max Drawdown, Slippage, Lookahead Audit",
+                desc: "Build production-grade portfolio risk reporting. Audit your backtesting framework for subtle data leaks (e.g. forward-looking standardized scalers or future corporate actions).",
+                resources: [
+                    { type: "Book", title: "Systematic Trading (Robert Carver)", detail: "Chapter 4: Risk and Volatility Management, Chapter 9: Backtesting" },
+                    { type: "Book", title: "Advances in Financial Machine Learning (Marcos López de Prado)", detail: "Chapter 11: Backtesting on Synthetic Data, Chapter 14: Backtest Overfitting" }
+                ],
+                tasks: [
+                    "Create a standalone risk_metrics.py module computing Parametric VaR, Historical VaR (95% & 99%), Sharpe Ratio, Sortino Ratio, Max Drawdown, and Calmar Ratio.",
+                    "Conduct a systematic code audit of your trading system for lookahead bias (e.g. ensuring StandardScaler uses only past data up to t).",
+                    "Add explicit transaction cost (bps per trade) and bid-ask spread slippage models to backtester.",
+                    "Checkpoint Stage 2 Passed: Risk-metrics module added + Option pricer hand-verified + Lookahead-bias audit completed."
+                ],
+                quiz: {
+                    q: "Where exactly could lookahead bias creep into your feature engineering pipeline, and why is Sharpe Ratio alone insufficient to judge a strategy?",
+                    a: "Lookahead bias occurs if: (1) normalizers (e.g. z-score) use global dataset mean/std instead of expanding historical windows; (2) feature calculation at bar t uses close price of bar t when execution happens at open of bar t; (3) survivorship-biased asset universe is used. Sharpe Ratio is insufficient because it treats upside volatility identically to downside volatility, assumes normally distributed returns, and can be easily gamed by selling out-of-the-money options (high Sharpe until catastrophic crash). Sortino ratio and Max Drawdown must be reported alongside."
+                }
+            },
+            {
+                id: 7,
+                stage: "s3",
+                stageName: "Stage 3 — Systems & Production Quant Engineering",
+                title: "C++ Hot Path Acceleration via pybind11",
+                focus: "C++ Performance Porting, pybind11 Interop, C++ STL, Benchmarking",
+                desc: "Bridge the gap between research Python and high-performance C++. Port a computationally heavy algorithm (e.g., rolling GARCH updates or option grid pricing) into C++ and bind it seamlessly into Python using pybind11.",
+                resources: [
+                    { type: "Repo/Doc", title: "Pybind11 Official Documentation", detail: "pybind11.readthedocs.io - Array buffers, NumPy bindings, Module creation" },
+                    { type: "Book", title: "Effective Modern C++ (Scott Meyers)", detail: "Items 18-22: Smart Pointers, Items 23-30: Move Semantics" }
+                ],
+                tasks: [
+                    "Profile Python trading system using cProfile to identify top bottleneck function.",
+                    "Write pure C++ implementation of the bottleneck function using std::vector and raw pointer access.",
+                    "Create bindings.cpp using pybind11 exposed as Python module (e.g. fast_quant).",
+                    "Write benchmark script comparing Pure Python vs NumPy vs C++ Extension across matrix sizes N = 10^3, 10^5, 10^7."
+                ],
+                quiz: {
+                    q: "Walk through what your Python/C++ binding does at the interface: what gets marshalled across, and what is the overhead cost of the boundary?",
+                    a: "Pybind11 converts Python objects (e.g. NumPy arrays via py::array_t<double>) into native C++ pointers/buffers. Passing NumPy arrays using py::array_t with buf.ptr avoids copying memory (zero-copy buffer protocol). However, invoking C++ functions inside tight Python loops incurs function call overhead (~50-100ns per call). To minimize boundary cost, pass bulk data arrays to C++ once rather than making frequent scalar calls across the language boundary."
+                }
+            },
+            {
+                id: 8,
+                stage: "s3",
+                stageName: "Stage 3 — Systems & Production Quant Engineering",
+                title: "Market Microstructure & High-Performance Market Data Infra",
+                focus: "Order Book (L1/L2), Bid-Ask Spread, Market Impact, DuckDB/Parquet",
+                desc: "Understand the physical mechanics of order execution. Transition from low-frequency daily bars to tick-level data structures and low-latency datastores.",
+                resources: [
+                    { type: "Book", title: "Trading and Exchanges: Market Microstructure (Larry Harris)", detail: "Chapter 6: Order Types, Chapter 10: Limit Order Books, Chapter 15: Bid-Ask Spread" },
+                    { type: "Tools", title: "DuckDB & Apache Parquet Specification", detail: "DuckDB Python API for fast time-series SQL analytical queries" }
+                ],
+                tasks: [
+                    "Design a columnar DuckDB schema to store tick-level quote (Bid, Ask, Size) and trade (Price, Size) data.",
+                    "Implement an Order Book simulator parsing L2 depth updates (Bids and Asks sorted by price-time priority).",
+                    "Calculate Bid-Ask spread cost and linear market impact ΔP = γ * Volume on execution fills.",
+                    "Compare query performance of DuckDB Parquet vs SQLite / CSV for 1,000,000 tick records."
+                ],
+                quiz: {
+                    q: "Why is tick data fundamentally different from bar data, and how does market microstructure impact execution assumptions in backtests?",
+                    a: "Bar data (OHLCV) aggregates and obscures intrabar price path, sequence of trades, bid-ask spread dynamics, and order book depth. Assuming execution at the bar Close or Open ignores market impact (your order moving the price) and queue priority (standing in line at the limit price). Tick data preserves order flow toxicity, bid-ask spread crossing costs, and actual market liquidity, preventing unrealistic backtest performance."
+                }
+            },
+            {
+                id: 9,
+                stage: "s3",
+                stageName: "Stage 3 — Systems & Production Quant Engineering",
+                title: "Property-Based Testing, Determinism & CI/CD Pipeline",
+                focus: "Hypothesis Testing, IEEE 754 Floating-Point, Reproducibility, CI/CD",
+                desc: "Apply institutional production engineering standards. Ensure mathematical properties hold invariant across synthetic inputs and automate testing via continuous integration.",
+                resources: [
+                    { type: "Repo/Doc", title: "Hypothesis Python Library", detail: "hypothesis.readthedocs.io - Property-based testing strategies" },
+                    { type: "Article", title: "What Every Computer Scientist Should Know About Floating-Point Arithmetic", detail: "David Goldberg (1991), ACM Computing Surveys" }
+                ],
+                tasks: [
+                    "Write property-based tests using hypothesis testing invariants (e.g. VaR_99 >= VaR_95, Option Delta in [0, 1]).",
+                    "Audit floating-point precision differences when summing price series in different orders (non-associativity of IEEE 754 float64).",
+                    "Build GitHub Actions / Azure DevOps CI pipeline YAML (.github/workflows/ci.yml) triggering on push.",
+                    "Checkpoint Stage 3 Passed: C++ hot-path ported with pybind11 + Property-based tests written + CI pipeline live."
+                ],
+                quiz: {
+                    q: "Where in your system would a floating-point rounding difference actually matter, and what does continuous integration catch that manual testing misses?",
+                    a: "Floating-point non-associativity ((a + b) + c ≠ a + (b + c)) matters when accumulating long time-series returns or in iterative numerical solvers (e.g. implied volatility root finders), where tiny rounding shifts can cause convergence to fail or change portfolio weightings at the margin. CI pipelines catch regression bugs, unpinned dependency breaks, non-deterministic random seed leaks, and failing edge-case assertions automatically on every push before code reaches production."
+                }
+            },
+            {
+                id: 10,
+                stage: "s4",
+                stageName: "Stage 4 — Quant Interview & Portfolio Readiness",
+                title: "Quantitative Pitching & Business Communication",
+                focus: "Quant Pitching, Capacity, Drawdown, Risk-Adjusted Framing, Case Study",
+                desc: "Translate technical implementation details into what portfolio managers and quantitative hiring managers care about: risk-adjusted performance, capital capacity, and failure diagnosis.",
+                resources: [
+                    { type: "Guide", title: "London Quant Developer Interview Scenarios", detail: "Millennium, JPMorgan, Legal & General interview framing guidelines" },
+                    { type: "Write-Up", title: "ECOM217 & EquityLens Case Study Format", detail: "Structuring technical failures as rigorous analytical strengths" }
+                ],
+                tasks: [
+                    "Craft a 90-second executive pitch for your algorithmic trading system covering: Alpha source, Sharpe/Sortino ratios, Max Drawdown, Execution capacity, and Risk Controls.",
+                    "Write a professional 2-page Case Study Markdown report for EquityLens leading with risk-adjusted performance and honest model limitations.",
+                    "Prepare an analytical defense of the ECOM217 project: Explain why near-zero returns were diagnosed as an NLP recall failure rather than a strategy flaw.",
+                    "Conduct a practice mock pitch recording or live peer review."
+                ],
+                quiz: {
+                    q: "Pitch your trading system's edge and risk profile in 90 seconds to a portfolio manager, then defend your model choice under pushback.",
+                    a: "'Our system trades an equity market-neutral ensemble strategy combining XGBoost signal generation with GARCH volatility filtering and Fama-French factor neutralization. Over a 3-year walk-forward backtest including transaction costs and bid-ask slippage, it achieved an annualized Sharpe of 1.62, Sortino of 2.15, and a Max Drawdown of 8.4%. Volatility is dynamically targeted at 10% annualized using GARCH conditional variance forecasts. We chose GARCH over rolling variance because financial returns exhibit volatility clustering; GARCH adapts rapidly to regime changes without lag.'"
+                }
+            },
+            {
+                id: 11,
+                stage: "s4",
+                stageName: "Stage 4 — Quant Interview & Portfolio Readiness",
+                title: "End-to-End Quant System Architecture & Whiteboarding",
+                focus: "System Architecture Diagrams, Feed Handlers, OMS/EMS, Failure Modes",
+                desc: "Master high-level quantitative architecture whiteboarding. Learn to diagram every link in the trading chain and defend system resilience under network or market anomalies.",
+                resources: [
+                    { type: "Tool", title: "Mermaid.js / Architecture Diagrams", detail: "Ingestion -> Feature Store -> Signal -> Risk -> OMS/EMS" },
+                    { type: "Topic", title: "Low-Latency System Design", detail: "Lock-free ring buffers, zero-copy socket reads, FIX protocol basics" }
+                ],
+                tasks: [
+                    "Draw detailed architectural diagram mapping: Market Data Feed -> Feature Store -> Machine Learning Engine -> Risk & Portfolio Manager -> Interactive Brokers API.",
+                    "Document system recovery procedures for data feed disconnects, stale prices, order rejections, and extreme market volatility halts.",
+                    "Embed the system architecture diagram directly into your trading system documentation.",
+                    "Practice explaining how your Python/C++ hybrid pipeline handles tick updates in real time."
+                ],
+                quiz: {
+                    q: "How does your market-data-ingestion -> signal -> execution pipeline fit together, and how does your system react to out-of-order market ticks or execution dropouts?",
+                    a: "Market data enters through an asynchronous feed handler (WebSocket/FIX) into a lock-free ring buffer. Ticks are timestamped at ingress and checked for monotonicity; out-of-order ticks are logged and discarded or re-ordered in a dynamic jitter buffer. Signals update state asynchronously; prior to order generation, the Risk Filter evaluates net portfolio delta, leverage, and VaR bounds. If the execution venue drops, the EMS transitions to a safe state, cancelling outstanding open orders and switching execution to resting fallback state."
+                }
+            },
+            {
+                id: 12,
+                stage: "s4",
+                stageName: "Stage 4 — Quant Interview & Portfolio Readiness",
+                title: "Quant Interview Mechanics, Brainteasers & Final Launch",
+                focus: "Probability Brainteasers, Mental Math, Mock Technical Interview, Applications",
+                desc: "Execute the final polish. Train on probability brainteasers, finalize GitHub portfolio repositories, and send targeted job applications to London quant developer roles (Millennium, JPMorgan, L&G, Hedge Funds).",
+                resources: [
+                    { type: "Book", title: "Quant Job Interview Questions and Answers (Mark Joshi)", detail: "Chapters 1-3: Math, Stochastics, Coding" },
+                    { type: "Book", title: "Fifty Challenging Problems in Probability (Frederick Mosteller)", detail: "Classic probability interview brainteasers" }
+                ],
+                tasks: [
+                    "Solve 15 classic probability and counting interview brainteasers (e.g. Monty Hall, expected coin flips, random walks, Bayes theorem).",
+                    "Complete a full 60-minute mock interview combining DS&A, C++ memory concepts, options math, and portfolio walk-through.",
+                    "Clean up GitHub repositories for Trading System and EquityLens (READMEs, build instructions, test badges, documentation).",
+                    "Checkpoint Stage 4 Passed: Mock interview cleared + Write-ups finished + Applications dispatched to London Quant roles."
+                ],
+                quiz: {
+                    q: "What's the weakest assumption in your trading system, and what would you build next with another month of development time?",
+                    a: "'The weakest assumption is stationarity of factor exposures over long horizons and simple linear slippage estimation. Given another month, I would implement: (1) dynamic regime-switching models (e.g. Hidden Markov Models) to adjust factor weights across volatility regimes; (2) an L2 order-book queue position model for non-linear execution slippage; and (3) expand our pybind11 C++ hot path to accelerate Monte Carlo risk calculations.'"
+                }
+            }
+        ];
+
+        // State Management
+        let appState = {
+            tasksCompleted: {}, // { "w1_t0": true, "w1_t1": false }
+            notes: {},          // { "w1": "text" }
+            activeStageFilter: "all",
+            searchQuery: "",
+            currentWeekId: null
+        };
+
+        // Initialize App
+        function initApp() {
+            loadStateFromLocalStorage();
+            renderTimeline();
+            updateMetrics();
+        }
+
+        // Save & Load State
+        function saveState() {
+            localStorage.setItem('quant_roadmap_state_v1', JSON.stringify(appState));
+            updateMetrics();
+        }
+
+        function loadStateFromLocalStorage() {
+            const saved = localStorage.getItem('quant_roadmap_state_v1');
+            if (saved) {
+                try {
+                    appState = JSON.parse(saved);
+                } catch(e) {
+                    console.error("Could not parse saved state", e);
+                }
+            }
+        }
+
+        // Render Timeline Cards
+        function renderTimeline() {
+            const container = document.getElementById('timelineContainer');
+            container.innerHTML = '';
+
+            const stages = [
+                { id: 's1', title: 'Stage 1 — Quant & CS Foundations, Verified (Weeks 1–3)', badge: 'badge-s1' },
+                { id: 's2', title: 'Stage 2 — Financial Engineering & Instruments (Weeks 4–6)', badge: 'badge-s2' },
+                { id: 's3', title: 'Stage 3 — Systems, Performance & Production Quant Engineering (Weeks 7–9)', badge: 'badge-s3' },
+                { id: 's4', title: 'Stage 4 — Portfolio, Domain Fluency & Interview Readiness (Weeks 10–12)', badge: 'badge-s4' }
+            ];
+
+            stages.forEach(stg => {
+                if (appState.activeStageFilter !== 'all' && appState.activeStageFilter !== stg.id) {
+                    return;
+                }
+
+                const stageWeeks = weeksData.filter(w => w.stage === stg.id && matchesSearch(w));
+                if (stageWeeks.length === 0) return;
+
+                const stageGroup = document.createElement('div');
+                stageGroup.className = 'stage-group';
+
+                stageGroup.innerHTML = `
+                    <div class="stage-header">
+                        <span class="stage-title">${stg.title}</span>
+                        <span class="stage-badge ${stg.badge}">${stg.id.toUpperCase()}</span>
+                    </div>
+                    <div class="weeks-grid">
+                        ${stageWeeks.map(w => renderWeekCard(w)).join('')}
+                    </div>
+                `;
+
+                container.appendChild(stageGroup);
+            });
+        }
+
+        function matchesSearch(week) {
+            if (!appState.searchQuery) return true;
+            const q = appState.searchQuery.toLowerCase();
+            return week.title.toLowerCase().includes(q) || 
+                   week.focus.toLowerCase().includes(q) || 
+                   week.desc.toLowerCase().includes(q) ||
+                   week.resources.some(r => r.title.toLowerCase().includes(q) || r.detail.toLowerCase().includes(q));
+        }
+
+        function renderWeekCard(w) {
+            const totalTasks = w.tasks.length;
+            let completedCount = 0;
+            for(let i = 0; i < totalTasks; i++) {
+                if (appState.tasksCompleted[`w${w.id}_t${i}`]) completedCount++;
+            }
+
+            let statusClass = "status-not-started";
+            let statusText = "Not Started";
+            if (completedCount === totalTasks && totalTasks > 0) {
+                statusClass = "status-completed";
+                statusText = "Completed";
+            } else if (completedCount > 0) {
+                statusClass = "status-in-progress";
+                statusText = "In Progress";
+            }
+
+            return `
+                <div class="week-card" onclick="openDrawer(${w.id})">
+                    <div class="week-card-top">
+                        <div class="week-meta">
+                            <span class="week-number">WEEK ${w.id}</span>
+                            <span class="status-pill ${statusClass}">${statusText}</span>
+                        </div>
+                        <h3 class="week-title">${w.title}</h3>
+                        <p class="week-desc">${w.desc}</p>
+                    </div>
+                    <div class="week-card-bottom">
+                        <span class="task-counter">${completedCount} / ${totalTasks} Tasks</span>
+                        <span class="drill-btn">Drill Down →</span>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Metrics Calculation
+        function updateMetrics() {
+            let totalTasks = 0;
+            let completedTasks = 0;
+            let checkpointsCount = 0;
+
+            weeksData.forEach(w => {
+                const count = w.tasks.length;
+                totalTasks += count;
+                let wCompleted = 0;
+                for(let i=0; i<count; i++) {
+                    if (appState.tasksCompleted[`w${w.id}_t${i}`]) {
+                        completedTasks++;
+                        wCompleted++;
+                    }
+                }
+                // Week 3, 6, 9, 12 contain checkpoint completion tasks
+                if ((w.id === 3 || w.id === 6 || w.id === 9 || w.id === 12) && wCompleted === count) {
+                    checkpointsCount++;
+                }
+            });
+
+            const percent = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
+            document.getElementById('overallPercent').innerText = `${percent}%`;
+            document.getElementById('overallProgressBar').style.width = `${percent}%`;
+            document.getElementById('tasksSummaryText').innerText = `${completedTasks} / ${totalTasks} Tasks Completed`;
+            document.getElementById('checkpointsPassed').innerText = `${checkpointsCount} / 4`;
+
+            // Active Stage heuristic
+            let activeStg = "Stage 1";
+            if (completedTasks > 9) activeStg = "Stage 2";
+            if (completedTasks > 18) activeStg = "Stage 3";
+            if (completedTasks > 27) activeStg = "Stage 4";
+            document.getElementById('activeStageText').innerText = activeStg;
+        }
+
+        // Drawer Drill-Down Logic
+        function openDrawer(weekId) {
+            appState.currentWeekId = weekId;
+            const week = weeksData.find(w => w.id === weekId);
+            if (!week) return;
+
+            document.getElementById('drawerTitle').innerText = `Week ${week.id}: ${week.title}`;
+            document.getElementById('drawerSubtitle').innerText = week.stageName;
+            document.getElementById('drawerDesc').innerText = week.desc;
+
+            // Render Resources
+            const resContainer = document.getElementById('drawerResources');
+            resContainer.innerHTML = week.resources.map(r => `
+                <div class="resource-item">
+                    <span class="resource-type">${r.type}</span>
+                    <div class="resource-info">
+                        <h4>${r.title}</h4>
+                        <p>${r.detail}</p>
+                    </div>
+                </div>
+            `).join('');
+
+            // Render Task Checkboxes
+            const taskContainer = document.getElementById('drawerTaskList');
+            taskContainer.innerHTML = week.tasks.map((t, idx) => {
+                const key = `w${week.id}_t${idx}`;
+                const checked = appState.tasksCompleted[key] ? 'checked' : '';
+                const completedClass = checked ? 'completed' : '';
+                return `
+                    <div class="task-item ${completedClass}" id="item_${key}">
+                        <input type="checkbox" id="${key}" ${checked} onchange="toggleTask('${key}', this)">
+                        <label class="task-label" for="${key}">${t}</label>
+                    </div>
+                `;
+            }).join('');
+
+            // Render Quiz Flashcard
+            const quizContainer = document.getElementById('drawerQuizArea');
+            quizContainer.innerHTML = `
+                <div class="flashcard">
+                    <div class="flashcard-q">
+                        <span>❓</span>
+                        <span>${week.quiz.q}</span>
+                    </div>
+                    <button class="reveal-btn" onclick="toggleQuizAnswer(this)">Reveal Model Answer & Intuition</button>
+                    <div class="flashcard-a">
+                        ${week.quiz.a}
+                    </div>
+                </div>
+            `;
+
+            // Render Notes
+            document.getElementById('drawerNotes').value = appState.notes[`w${week.id}`] || '';
+
+            // Open Overlay
+            document.getElementById('drawerOverlay').classList.add('active');
+        }
+
+        function closeDrawer(event) {
+            if (event.target.id === 'drawerOverlay') {
+                closeDrawerForce();
+            }
+        }
+
+        function closeDrawerForce() {
+            document.getElementById('drawerOverlay').classList.remove('active');
+            renderTimeline();
+        }
+
+        function switchDrawerTab(tabId, btn) {
+            document.querySelectorAll('.dtab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+            
+            btn.classList.add('active');
+            document.getElementById(`dpane-${tabId}`).classList.add('active');
+        }
+
+        function toggleTask(key, checkbox) {
+            appState.tasksCompleted[key] = checkbox.checked;
+            const item = document.getElementById(`item_${key}`);
+            if (checkbox.checked) {
+                item.classList.add('completed');
+            } else {
+                item.classList.remove('completed');
+            }
+            saveState();
+        }
+
+        function toggleQuizAnswer(btn) {
+            const ans = btn.nextElementSibling;
+            if (ans.classList.contains('show')) {
+                ans.classList.remove('show');
+                btn.innerText = 'Reveal Model Answer & Intuition';
+            } else {
+                ans.classList.add('show');
+                btn.innerText = 'Hide Model Answer';
+                // count self check as viewed
+                appState.tasksCompleted[`quiz_viewed_${appState.currentWeekId}`] = true;
+                saveState();
+            }
+        }
+
+        function saveCurrentWeekNotes() {
+            if (!appState.currentWeekId) return;
+            const val = document.getElementById('drawerNotes').value;
+            appState.notes[`w${appState.currentWeekId}`] = val;
+            saveState();
+        }
+
+        // Filtering & Search
+        function filterStage(stageId, btn) {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            appState.activeStageFilter = stageId;
+            renderTimeline();
+        }
+
+        function handleSearch() {
+            appState.searchQuery = document.getElementById('searchInput').value;
+            renderTimeline();
+        }
+
+        // Reset & Export/Import
+        function resetProgress() {
+            if (confirm("Are you sure you want to reset all progress and notes?")) {
+                appState = { tasksCompleted: {}, notes: {}, activeStageFilter: "all", searchQuery: "" };
+                saveState();
+                renderTimeline();
+            }
+        }
+
+        function exportData() {
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(appState, null, 2));
+            const downloadAnchor = document.createElement('a');
+            downloadAnchor.setAttribute("href", dataStr);
+            downloadAnchor.setAttribute("download", `quant_roadmap_progress_${new Date().toISOString().slice(0,10)}.json`);
+            document.body.appendChild(downloadAnchor);
+            downloadAnchor.click();
+            downloadAnchor.remove();
+        }
+
+        function importData(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const imported = JSON.parse(e.target.result);
+                    if (imported && typeof imported === 'object') {
+                        appState = imported;
+                        saveState();
+                        renderTimeline();
+                        alert("Progress successfully imported!");
+                    }
+                } catch(err) {
+                    alert("Invalid JSON file.");
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        // Run on load
+        window.addEventListener('DOMContentLoaded', initApp);
+    </script>
+</body>
+</html>
