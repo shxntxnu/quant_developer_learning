@@ -87,6 +87,10 @@ graph TD
    - Cubic Spline and Linear yield interpolation across tenors.
 2. **C++ & Python Bindings (ctypes / pybind11):**
    - Direct execution of C++ DLL pricing engines inside Python trading loops for ultra-fast backtesting.
+3. **Modular C++ Rule-Based Production Trading System (`tc-trader` / `tc_engine.exe`):**
+   - Complete 5-thread pipeline architecture with C ABI plugin DLLs, lock-free ring buffers, and Interactive Brokers execution.
+   - Master Architecture Diagram: [`trading_system_workflow.drawio`](file:///Users/yash/Documents/Projects/others/quant_developer_learning/trading_system_workflow.drawio)
+   - Detailed Implementation Roadmap: **[`TRADING_SYSTEM_DEVELOPMENT_GUIDE.md`](file:///Users/yash/Documents/Projects/others/quant_developer_learning/TRADING_SYSTEM_DEVELOPMENT_GUIDE.md)**
 
 ---
 

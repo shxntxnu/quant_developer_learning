@@ -1,3 +1,18 @@
-/Algorithmic Trading Machine Learning Strategies/functions/*.exe
-/Algorithmic Trading Machine Learning Strategies/.venv/*
+# Virtual environments
 /.venv
+/Algorithmic Trading Machine Learning Strategies/.venv/*
+
+# Compiled binaries, libraries & symbols
+*.exe
+*.dll
+*.dylib
+*.so
+*.a
+*.o
+*.dSYM/
+bin/
+tc-trader/bin/
+
+# Runtime test logs & outputs
+logs/
+tc-trader/logs/
