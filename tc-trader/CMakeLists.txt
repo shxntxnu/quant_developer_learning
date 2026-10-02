@@ -26,12 +26,8 @@ add_library(tc_journal SHARED
 )
 target_include_directories(tc_journal PRIVATE modules/journal)
 target_compile_definitions(tc_journal PRIVATE TC_EXPORTS)
-set_target_properties(tc_journal PROPERTIES
-    PREFIX ""
-    OUTPUT_NAME "tc_journal"
-)
+set_target_properties(tc_journal PROPERTIES PREFIX "" OUTPUT_NAME "tc_journal")
 
-# Test executable for tc_journal
 add_executable(test_journal tests/test_journal.cpp)
 if(NOT MSVC)
     target_link_libraries(test_journal PRIVATE dl pthread)
@@ -45,20 +41,31 @@ add_library(tc_portfolio SHARED
 )
 target_include_directories(tc_portfolio PRIVATE modules/portfolio)
 target_compile_definitions(tc_portfolio PRIVATE TC_EXPORTS)
-set_target_properties(tc_portfolio PROPERTIES
-    PREFIX ""
-    OUTPUT_NAME "tc_portfolio"
-)
+set_target_properties(tc_portfolio PROPERTIES PREFIX "" OUTPUT_NAME "tc_portfolio")
 
-# Test executable for tc_portfolio
 add_executable(test_portfolio tests/test_portfolio.cpp)
 if(NOT MSVC)
     target_link_libraries(test_portfolio PRIVATE dl pthread)
 endif()
 add_dependencies(test_portfolio tc_portfolio)
 
+# Layer 2 Plugin DLL: tc_indicators
+add_library(tc_indicators SHARED
+    modules/indicators/indicators_module.cpp
+)
+target_include_directories(tc_indicators PRIVATE modules/indicators)
+target_compile_definitions(tc_indicators PRIVATE TC_EXPORTS)
+set_target_properties(tc_indicators PROPERTIES PREFIX "" OUTPUT_NAME "tc_indicators")
+
+add_executable(test_indicators tests/test_indicators.cpp)
+if(NOT MSVC)
+    target_link_libraries(test_indicators PRIVATE dl pthread)
+endif()
+add_dependencies(test_indicators tc_indicators)
+
 enable_testing()
 add_test(NAME TestTypes COMMAND test_types)
 add_test(NAME TestRingBuffer COMMAND test_ringbuffer)
 add_test(NAME TestJournal COMMAND test_journal)
 add_test(NAME TestPortfolio COMMAND test_portfolio)
+add_test(NAME TestIndicators COMMAND test_indicators)

@@ -46,6 +46,28 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
   - Verified long entry, scaling in, mark-to-market PnL, partial reduction, position reversal (long to short), and short covering.
   - Verified clean broker reconciliation (0 discrepancies) and intentional discrepancy detection.
 
+### Added - 2026-10-02: `tc_indicators` (O(1) Incremental Technical Indicators Module)
+* **Shared ABI Header:** [`include/tc/indicators/tc_indicators.h`](file:///Users/yash/Documents/Projects/others/quant_developer_learning/tc-trader/include/tc/indicators/tc_indicators.h)
+  - Defined `ITcIndicators` C ABI vtable containing `update_bar()`, `get_snapshot()`, `reset()`, and `warmup_bars_required()`.
+  - Defined `TcIndicatorSpec` configuration struct for custom periods.
+* **Header-Only Incremental Math Core:** [`include/tc/indicators/tc_indicators_core.hpp`](file:///Users/yash/Documents/Projects/others/quant_developer_learning/tc-trader/include/tc/indicators/tc_indicators_core.hpp)
+  - Implemented circular ring buffers for strictly zero heap allocations on the hot path.
+  - **SMA:** $O(1)$ fast (20) and slow (50) moving averages via running sum buffer.
+  - **EMA:** Exponential smoothing ($\alpha = 2 / (N+1)$) seeded with initial period average.
+  - **RSI (14):** Wilder's exponential smoothing of upward and downward price deltas with boundary protections.
+  - **MACD (12, 26, 9):** Fast EMA, slow EMA, MACD line, 9-EMA signal line, and histogram.
+  - **ATR (14):** Average True Range computed using true range expansion and Wilder's smoothing.
+  - **Bollinger Bands (20, 2.0):** Incremental running sum of squares for real-time variance and standard deviation.
+  - **ADX (14):** Directional movement indices ($+DM$, $-DM$, $+DI$, $-DI$, $DX$) and smoothed ADX for trend strength.
+  - **Warmup State Engine:** Incremental bitmask activation (`TC_IND_MASK_*`) tracking readiness as bars stream in.
+* **Plugin DLL Implementation:** [`modules/indicators/indicators_module.cpp`](file:///Users/yash/Documents/Projects/others/quant_developer_learning/tc-trader/modules/indicators/indicators_module.cpp)
+  - Exports `tc_get_module_vtable()` and resolves `ITcIndicators`.
+* **Integration & Benchmark Test:** [`tests/test_indicators.cpp`](file:///Users/yash/Documents/Projects/others/quant_developer_learning/tc-trader/tests/test_indicators.cpp)
+  - Validates dynamic loading via `dlopen`/`dlsym`.
+  - Verified warmup progression: Bar 15 (RSI/ATR), Bar 20 (SMA20/EMA/BB), Bar 50 (SMA50/MACD/ADX - Full Warmup).
+  - Verified mathematical bounds ($0 \le \text{RSI}, \text{ADX} \le 100$, $\text{BB}_{\text{lower}} \le \text{BB}_{\text{mid}} \le \text{BB}_{\text{upper}}$).
+  - Achieved sustained streaming throughput of **14.41 Million bars/sec** on 1,000,000 synthetic bars.
+
 ---
 
 ## [1.0.0] - Phase 1: Shared C ABI & Concurrency Foundation - 2026-10-02

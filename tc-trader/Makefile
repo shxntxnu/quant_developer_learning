@@ -11,12 +11,15 @@ UNAME_S := $(shell uname -s)
 ifeq ($(UNAME_S),Darwin)
     JOURNAL_LIB = $(BIN_DIR)/libtc_journal.dylib
     PORTFOLIO_LIB = $(BIN_DIR)/libtc_portfolio.dylib
+    INDICATORS_LIB = $(BIN_DIR)/libtc_indicators.dylib
 else ifeq ($(UNAME_S),Linux)
     JOURNAL_LIB = $(BIN_DIR)/libtc_journal.so
     PORTFOLIO_LIB = $(BIN_DIR)/libtc_portfolio.so
+    INDICATORS_LIB = $(BIN_DIR)/libtc_indicators.so
 else
     JOURNAL_LIB = $(BIN_DIR)/tc_journal.dll
     PORTFOLIO_LIB = $(BIN_DIR)/tc_portfolio.dll
+    INDICATORS_LIB = $(BIN_DIR)/tc_indicators.dll
 endif
 
 JOURNAL_SRCS = $(MODULES_DIR)/journal/journal_module.cpp \
@@ -26,12 +29,16 @@ JOURNAL_SRCS = $(MODULES_DIR)/journal/journal_module.cpp \
 PORTFOLIO_SRCS = $(MODULES_DIR)/portfolio/portfolio_module.cpp \
                  $(MODULES_DIR)/portfolio/position_book.cpp
 
+INDICATORS_SRCS = $(MODULES_DIR)/indicators/indicators_module.cpp
+
 TARGETS = $(BIN_DIR)/test_types \
           $(BIN_DIR)/test_ringbuffer \
           $(JOURNAL_LIB) \
           $(BIN_DIR)/test_journal \
           $(PORTFOLIO_LIB) \
-          $(BIN_DIR)/test_portfolio
+          $(BIN_DIR)/test_portfolio \
+          $(INDICATORS_LIB) \
+          $(BIN_DIR)/test_indicators
 
 .PHONY: all clean run_tests
 
@@ -61,6 +68,13 @@ $(PORTFOLIO_LIB): $(PORTFOLIO_SRCS) | $(BIN_DIR)
 $(BIN_DIR)/test_portfolio: $(TESTS_DIR)/test_portfolio.cpp $(PORTFOLIO_LIB) | $(BIN_DIR)
 	$(CXX) $(CXXFLAGS) -o $@ $<
 
+# Layer 2 tc_indicators Plugin Shared Library & Test
+$(INDICATORS_LIB): $(INDICATORS_SRCS) | $(BIN_DIR)
+	$(CXX) $(CXXFLAGS) $(SO_FLAGS) -DTC_EXPORTS -I$(MODULES_DIR)/indicators -o $@ $(INDICATORS_SRCS)
+
+$(BIN_DIR)/test_indicators: $(TESTS_DIR)/test_indicators.cpp $(INDICATORS_LIB) | $(BIN_DIR)
+	$(CXX) $(CXXFLAGS) -o $@ $<
+
 run_tests: all
 	@echo "\n=== Running test_types ==="
 	@./$(BIN_DIR)/test_types
@@ -70,6 +84,8 @@ run_tests: all
 	@./$(BIN_DIR)/test_journal
 	@echo "\n=== Running test_portfolio ==="
 	@./$(BIN_DIR)/test_portfolio
+	@echo "\n=== Running test_indicators ==="
+	@./$(BIN_DIR)/test_indicators
 
 clean:
 	rm -rf $(BIN_DIR) logs
