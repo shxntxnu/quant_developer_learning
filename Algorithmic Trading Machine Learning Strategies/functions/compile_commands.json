@@ -1,0 +1,32 @@
+[
+  {
+    "directory": "D:/Documents/_MyStuff/Projects/quant_developer_learning/Algorithmic Trading Machine Learning Strategies/functions",
+    "command": "C:/TDM-GCC-64/bin/g++.exe -Iinclude -DMATHLIB_EXPORTS -c src/MathLib.cpp -o bin/MathLib.o",
+    "file": "src/MathLib.cpp"
+  },
+  {
+    "directory": "D:/Documents/_MyStuff/Projects/quant_developer_learning/Algorithmic Trading Machine Learning Strategies/functions",
+    "command": "C:/TDM-GCC-64/bin/g++.exe -Iinclude -DCALCULATEYTMYIELD_EXPORTS -c src/calculateYTMYield.cpp -o bin/calculateYTMYield.o",
+    "file": "src/calculateYTMYield.cpp"
+  },
+  {
+    "directory": "D:/Documents/_MyStuff/Projects/quant_developer_learning/Algorithmic Trading Machine Learning Strategies/functions",
+    "command": "C:/TDM-GCC-64/bin/g++.exe -Iinclude -DCALCULATEZEROCOUPONYIELD_EXPORTS -c src/calculateZeroCouponYield.cpp -o bin/calculateZeroCouponYield.o",
+    "file": "src/calculateZeroCouponYield.cpp"
+  },
+  {
+    "directory": "D:/Documents/_MyStuff/Projects/quant_developer_learning/Algorithmic Trading Machine Learning Strategies/functions",
+    "command": "C:/TDM-GCC-64/bin/g++.exe -Iinclude -DCALCULATEADF_EXPORTS -c src/calculateADF.cpp -o bin/calculateADF.o",
+    "file": "src/calculateADF.cpp"
+  },
+  {
+    "directory": "D:/Documents/_MyStuff/Projects/quant_developer_learning/Algorithmic Trading Machine Learning Strategies/functions",
+    "command": "C:/TDM-GCC-64/bin/g++.exe -Iinclude -DCALCULATECOINTEGRATION_EXPORTS -c src/calculateCointegration.cpp -o bin/calculateCointegration.o",
+    "file": "src/calculateCointegration.cpp"
+  },
+  {
+    "directory": "D:/Documents/_MyStuff/Projects/quant_developer_learning/Algorithmic Trading Machine Learning Strategies/functions",
+    "command": "C:/TDM-GCC-64/bin/g++.exe -Iinclude -c main.cpp -o bin/main.o",
+    "file": "main.cpp"
+  }
+]

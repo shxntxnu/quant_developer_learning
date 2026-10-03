@@ -1,0 +1,5 @@
+CompileFlags:
+  Compiler: C:/TDM-GCC-64/bin/g++.exe
+  Add:
+    - -ID:/Documents/_MyStuff/Projects/quant_developer_learning/Algorithmic Trading Machine Learning Strategies/functions
+    - -ID:/Documents/_MyStuff/Projects/quant_developer_learning/Algorithmic Trading Machine Learning Strategies/functions/include

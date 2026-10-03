@@ -1,0 +1,11 @@
+{
+  "clangd.arguments": [
+    "--query-driver=C:/TDM-GCC-64/bin/g++.exe,C:/TDM-GCC-64/bin/gcc.exe",
+    "--background-index",
+    "--clang-tidy",
+    "--header-insertion=iwyu"
+  ],
+  "clangd.fallbackFlags": [
+    "-std=c++17"
+  ]
+}
