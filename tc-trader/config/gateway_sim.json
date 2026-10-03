@@ -1,0 +1,10 @@
+{
+  "gateway_name": "tc_gateway_sim",
+  "data_file_path": "../Algorithmic Trading Machine Learning Strategies/simulated_5min_data.csv",
+  "default_symbol": "SIM",
+  "slippage_pct": 0.0001,
+  "commission_per_share": 0.005,
+  "min_commission": 1.00,
+  "latency_ns": 0,
+  "flags": 0
+}

@@ -105,6 +105,20 @@ if(NOT MSVC)
 endif()
 add_dependencies(test_marketdata tc_marketdata)
 
+# Layer 2 Plugin DLL: tc_gateway_sim
+add_library(tc_gateway_sim SHARED
+    modules/gateway_sim/gateway_sim_module.cpp
+)
+target_include_directories(tc_gateway_sim PRIVATE modules/gateway_sim)
+target_compile_definitions(tc_gateway_sim PRIVATE TC_EXPORTS)
+set_target_properties(tc_gateway_sim PROPERTIES PREFIX "" OUTPUT_NAME "tc_gateway_sim")
+
+add_executable(test_gateway_sim tests/test_gateway_sim.cpp)
+if(NOT MSVC)
+    target_link_libraries(test_gateway_sim PRIVATE dl pthread)
+endif()
+add_dependencies(test_gateway_sim tc_gateway_sim)
+
 enable_testing()
 add_test(NAME TestTypes COMMAND test_types)
 add_test(NAME TestRingBuffer COMMAND test_ringbuffer)
@@ -114,4 +128,5 @@ add_test(NAME TestIndicators COMMAND test_indicators)
 add_test(NAME TestStrategy COMMAND test_strategy)
 add_test(NAME TestRisk COMMAND test_risk)
 add_test(NAME TestMarketData COMMAND test_marketdata)
+add_test(NAME TestGatewaySim COMMAND test_gateway_sim)
 

@@ -15,6 +15,7 @@ ifeq ($(UNAME_S),Darwin)
     STRATEGY_LIB = $(BIN_DIR)/libtc_strategy.dylib
     RISK_LIB = $(BIN_DIR)/libtc_risk.dylib
     MARKETDATA_LIB = $(BIN_DIR)/libtc_marketdata.dylib
+    GATEWAY_SIM_LIB = $(BIN_DIR)/libtc_gateway_sim.dylib
 else ifeq ($(UNAME_S),Linux)
     JOURNAL_LIB = $(BIN_DIR)/libtc_journal.so
     PORTFOLIO_LIB = $(BIN_DIR)/libtc_portfolio.so
@@ -22,6 +23,7 @@ else ifeq ($(UNAME_S),Linux)
     STRATEGY_LIB = $(BIN_DIR)/libtc_strategy.so
     RISK_LIB = $(BIN_DIR)/libtc_risk.so
     MARKETDATA_LIB = $(BIN_DIR)/libtc_marketdata.so
+    GATEWAY_SIM_LIB = $(BIN_DIR)/libtc_gateway_sim.so
 else
     JOURNAL_LIB = $(BIN_DIR)/tc_journal.dll
     PORTFOLIO_LIB = $(BIN_DIR)/tc_portfolio.dll
@@ -29,6 +31,7 @@ else
     STRATEGY_LIB = $(BIN_DIR)/tc_strategy.dll
     RISK_LIB = $(BIN_DIR)/tc_risk.dll
     MARKETDATA_LIB = $(BIN_DIR)/tc_marketdata.dll
+    GATEWAY_SIM_LIB = $(BIN_DIR)/tc_gateway_sim.dll
 endif
 
 JOURNAL_SRCS = $(MODULES_DIR)/journal/journal_module.cpp \
@@ -46,6 +49,8 @@ RISK_SRCS = $(MODULES_DIR)/risk/risk_module.cpp
 
 MARKETDATA_SRCS = $(MODULES_DIR)/marketdata/marketdata_module.cpp
 
+GATEWAY_SIM_SRCS = $(MODULES_DIR)/gateway_sim/gateway_sim_module.cpp
+
 TARGETS = $(BIN_DIR)/test_types \
           $(BIN_DIR)/test_ringbuffer \
           $(JOURNAL_LIB) \
@@ -59,7 +64,9 @@ TARGETS = $(BIN_DIR)/test_types \
           $(RISK_LIB) \
           $(BIN_DIR)/test_risk \
           $(MARKETDATA_LIB) \
-          $(BIN_DIR)/test_marketdata
+          $(BIN_DIR)/test_marketdata \
+          $(GATEWAY_SIM_LIB) \
+          $(BIN_DIR)/test_gateway_sim
 
 .PHONY: all clean run_tests
 
@@ -117,6 +124,13 @@ $(MARKETDATA_LIB): $(MARKETDATA_SRCS) | $(BIN_DIR)
 $(BIN_DIR)/test_marketdata: $(TESTS_DIR)/test_marketdata.cpp $(MARKETDATA_LIB) | $(BIN_DIR)
 	$(CXX) $(CXXFLAGS) -o $@ $<
 
+# Layer 2 tc_gateway_sim Plugin Shared Library & Test
+$(GATEWAY_SIM_LIB): $(GATEWAY_SIM_SRCS) | $(BIN_DIR)
+	$(CXX) $(CXXFLAGS) $(SO_FLAGS) -DTC_EXPORTS -I$(MODULES_DIR)/gateway_sim -o $@ $(GATEWAY_SIM_SRCS)
+
+$(BIN_DIR)/test_gateway_sim: $(TESTS_DIR)/test_gateway_sim.cpp $(GATEWAY_SIM_LIB) | $(BIN_DIR)
+	$(CXX) $(CXXFLAGS) -o $@ $<
+
 run_tests: all
 	@echo "\n=== Running test_types ==="
 	@./$(BIN_DIR)/test_types
@@ -134,6 +148,8 @@ run_tests: all
 	@./$(BIN_DIR)/test_risk
 	@echo "\n=== Running test_marketdata ==="
 	@./$(BIN_DIR)/test_marketdata
+	@echo "\n=== Running test_gateway_sim ==="
+	@./$(BIN_DIR)/test_gateway_sim
 
 clean:
 	rm -rf $(BIN_DIR) logs

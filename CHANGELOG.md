@@ -142,7 +142,36 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
   - Verified tick normalization, timestamp filtering, outlier spike rejection, crossed-book drops, bar OHLCV and VWAP math, manual bar flushing, and real-time feed health status transitions.
   - Achieved sustained hot-path throughput of **31.58 Million ticks/sec** on 2,000,000 raw ticks.
 
+### Added - 2026-10-03: `tc_gateway_sim` (Historical Market Replay & In-Memory Matching Engine Module)
+* **Unified Gateway C ABI Header:** [`include/tc/gateway/tc_gateway.h`](file:///d:/Documents/_MyStuff/Projects/quant_developer_learning/tc-trader/include/tc/gateway/tc_gateway.h)
+  - Defined unified `ITcGateway` C ABI interface table shared identically by `tc_gateway_sim.dll` and live `tc_gateway_ibkr.dll`.
+  - Defined `TcGatewayConfig`, `TcGatewayStats`, and `TcOrder` POD structures.
+  - Defined callback sink types: `TcBarSink` ($T1 \to T2$), `TcOrderEventSink` ($T1 \to T3$), and `TcFillSink` ($T1 \to \text{Portfolio}$).
+  - Declared gateway operations: `connect()`, `disconnect()`, `is_connected()`, `subscribe_bars()`, `unsubscribe_bars()`, `place_order()`, `cancel_order()`, `cancel_all_orders()`, `step()`, `run_replay()`, `get_stats()`, and `reset()`.
+* **High-Performance CSV Parser:** [`modules/gateway_sim/csv_loader.hpp`](file:///d:/Documents/_MyStuff/Projects/quant_developer_learning/tc-trader/modules/gateway_sim/csv_loader.hpp)
+  - Implemented branch-free civil calendar date-to-epoch algorithm (Howard Hinnant's standard algorithm) for fast nanosecond timestamp conversion.
+  - Dynamic case-insensitive header inspection seamlessly handling column ordering differences between intraday (`datetime,open,low,high,close,volume`) and daily (`Date,Open,High,Low,Close,Adj Close,Volume`) CSV formats.
+  - Loads 177,879 historical bars into contiguous in-memory cache for deterministic zero-allocation replay.
+* **In-Memory Simulation Matching Engine:** [`modules/gateway_sim/matching_engine.hpp`](file:///d:/Documents/_MyStuff/Projects/quant_developer_learning/tc-trader/modules/gateway_sim/matching_engine.hpp)
+  - Zero dynamic heap allocation on matching hot path via fixed-capacity array table (`MAX_WORKING_ORDERS = 1024`).
+  - Supports Market (`TC_GW_ORDER_MKT`), Limit (`TC_GW_ORDER_LMT`), Stop (`TC_GW_ORDER_STP`), and Stop-Limit (`TC_GW_ORDER_STP_LMT`) orders.
+  - Matches open orders against bar OHLCV extremes, applying realistic configurable slippage models and broker/exchange commissions.
+  - Supports One-Cancels-All (OCA) bracket orders: filling a child order automatically cancels sibling orders sharing `parent_order_id`.
+  - Manual cancellation support: single order cancellation by `client_order_id` and global/symbol-scoped `cancel_all_orders()`.
+* **Gateway Simulation Replay Engine:** [`modules/gateway_sim/gateway_sim_engine.hpp`](file:///d:/Documents/_MyStuff/Projects/quant_developer_learning/tc-trader/modules/gateway_sim/gateway_sim_engine.hpp)
+  - Coordinates dataset ingestion, bar playback cursor, order routing, event sinks, and telemetry aggregation.
+  - Supports both granular single-stepping (`step()`) and continuous fast-forward replay (`run_replay()`).
+* **Configuration:** [`config/gateway_sim.json`](file:///d:/Documents/_MyStuff/Projects/quant_developer_learning/tc-trader/config/gateway_sim.json)
+  - Configurable data file path, default symbol, slippage percentage, and commission schedules.
+* **Plugin DLL Implementation:** [`modules/gateway_sim/gateway_sim_module.cpp`](file:///d:/Documents/_MyStuff/Projects/quant_developer_learning/tc-trader/modules/gateway_sim/gateway_sim_module.cpp)
+  - Exports standard `tc_get_module_vtable()` and resolves `ITcGateway`.
+* **Integration & Benchmark Test:** [`tests/test_gateway_sim.cpp`](file:///d:/Documents/_MyStuff/Projects/quant_developer_learning/tc-trader/tests/test_gateway_sim.cpp)
+  - Validates dynamic loading via `LoadLibrary`/`GetProcAddress`.
+  - Verified historical CSV loading (177,879 5-minute bars), single-step emission, market order execution, limit order matching, resting order cancellation, bracket/OCA cancellation, and cancel-all functionality.
+  - Achieved sustained replay throughput of **1.47 Million bars/sec** (> 500,000 bars/sec target).
+
 ---
+
 
 
 ## [1.0.0] - Phase 1: Shared C ABI & Concurrency Foundation - 2026-10-02
