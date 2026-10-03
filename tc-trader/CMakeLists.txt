@@ -77,6 +77,20 @@ if(NOT MSVC)
 endif()
 add_dependencies(test_strategy tc_strategy)
 
+# Layer 2 Plugin DLL: tc_risk
+add_library(tc_risk SHARED
+    modules/risk/risk_module.cpp
+)
+target_include_directories(tc_risk PRIVATE modules/risk)
+target_compile_definitions(tc_risk PRIVATE TC_EXPORTS)
+set_target_properties(tc_risk PROPERTIES PREFIX "" OUTPUT_NAME "tc_risk")
+
+add_executable(test_risk tests/test_risk.cpp)
+if(NOT MSVC)
+    target_link_libraries(test_risk PRIVATE dl pthread)
+endif()
+add_dependencies(test_risk tc_risk)
+
 enable_testing()
 add_test(NAME TestTypes COMMAND test_types)
 add_test(NAME TestRingBuffer COMMAND test_ringbuffer)
@@ -84,3 +98,4 @@ add_test(NAME TestJournal COMMAND test_journal)
 add_test(NAME TestPortfolio COMMAND test_portfolio)
 add_test(NAME TestIndicators COMMAND test_indicators)
 add_test(NAME TestStrategy COMMAND test_strategy)
+add_test(NAME TestRisk COMMAND test_risk)

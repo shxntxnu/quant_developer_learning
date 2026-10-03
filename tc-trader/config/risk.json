@@ -1,0 +1,14 @@
+{
+  "risk_fraction_per_trade": 0.01,
+  "max_position_qty": 1000,
+  "max_position_notional": 100000.0,
+  "min_position_qty": 1,
+  "max_gross_leverage": 2.0,
+  "min_buying_power": 5000.0,
+  "max_drawdown_pct": 0.05,
+  "max_daily_loss": 5000.0,
+  "max_price_collar_pct": 0.03,
+  "min_stop_distance_pct": 0.002,
+  "allow_shorting": true,
+  "auto_kill_on_drawdown": true
+}

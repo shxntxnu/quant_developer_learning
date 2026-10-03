@@ -63,5 +63,15 @@
     "directory": "D:/Documents/_MyStuff/Projects/quant_developer_learning/tc-trader",
     "command": "C:/TDM-GCC-64/bin/g++.exe -std=c++20 -O3 -Wall -Wextra -pthread -Iinclude -c tests/test_strategy.cpp -o bin/test_strategy.o",
     "file": "tc-trader/tests/test_strategy.cpp"
+  },
+  {
+    "directory": "D:/Documents/_MyStuff/Projects/quant_developer_learning/tc-trader",
+    "command": "C:/TDM-GCC-64/bin/g++.exe -std=c++20 -O3 -Wall -Wextra -shared -DTC_EXPORTS -Iinclude -Imodules/risk -c modules/risk/risk_module.cpp -o bin/risk_module.o",
+    "file": "tc-trader/modules/risk/risk_module.cpp"
+  },
+  {
+    "directory": "D:/Documents/_MyStuff/Projects/quant_developer_learning/tc-trader",
+    "command": "C:/TDM-GCC-64/bin/g++.exe -std=c++20 -O3 -Wall -Wextra -pthread -Iinclude -c tests/test_risk.cpp -o bin/test_risk.o",
+    "file": "tc-trader/tests/test_risk.cpp"
   }
 ]

@@ -88,7 +88,35 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 * **Integration & Benchmark Test:** [`tests/test_strategy.cpp`](file:///d:/Documents/_MyStuff/Projects/quant_developer_learning/tc-trader/tests/test_strategy.cpp)
   - Validates dynamic loading via `LoadLibrary`/`GetProcAddress`.
   - Verified all regime states, bull/bear trend entries, oversold/overbought mean reversion entries, trailing stops, profit targets, MA reversal exits, and timeout exits.
-  - Achieved sustained streaming throughput of **31.1 - 86.1 Million evals/sec** on 1,000,000 snapshots.
+### Added - 2026-10-03: `tc_risk` (Position Sizing & Capital Protection Engine)
+* **Shared ABI Header:** [`include/tc/risk/tc_risk.h`](file:///d:/Documents/_MyStuff/Projects/quant_developer_learning/tc-trader/include/tc/risk/tc_risk.h)
+  - Defined `ITcRisk` C ABI vtable containing `configure()`, `get_params()`, `set_params()`, `evaluate_signal()`, `set_symbol_kill_switch()`, `get_symbol_kill_switch()`, `set_global_kill_switch()`, `get_global_kill_switch()`, and `reset()`.
+  - Defined `TcRiskDecision` POD struct returning `decision_code`, `approved_qty`, `reason`, `suggested_limit_price`, `suggested_stop_loss`, and `suggested_take_profit`.
+  - Defined `TcRiskDecisionCode` enum (`TC_RISK_APPROVED`, `TC_RISK_CLAMPED`, `TC_RISK_REJECTED_MAX_POSITION`, `TC_RISK_REJECTED_MAX_ORDER_VALUE`, `TC_RISK_REJECTED_BUYING_POWER`, `TC_RISK_REJECTED_LEVERAGE`, `TC_RISK_REJECTED_PRICE_COLLAR`, `TC_RISK_REJECTED_MAX_DRAWDOWN`, `TC_RISK_REJECTED_SYMBOL_HALTED`, `TC_RISK_REJECTED_GLOBAL_KILL_SWITCH`, `TC_RISK_REJECTED_INVALID_SIGNAL`).
+  - Defined `TcRiskParams` configuration struct for fixed-fractional sizing, leverage limits, drawdown limits, price collar percentages, and max order/position thresholds.
+* **High-Performance Pure Function Engine:** [`modules/risk/risk_engine.hpp`](file:///d:/Documents/_MyStuff/Projects/quant_developer_learning/tc-trader/modules/risk/risk_engine.hpp)
+  - Evaluates `(TcSignal, TcPortfolioSnapshot) -> TcRiskDecision` synchronously on Thread T2 with strictly zero dynamic heap allocations.
+  - **Fixed-Fractional Position Sizing:** Dynamically sizes order quantities based on risk per trade ($\text{Qty} = \lfloor \frac{\text{Equity} \times \text{RiskPct}}{\text{StopDistance}} \rfloor$).
+  - **Pre-Trade Risk Checks:**
+    1. Global kill switch validation.
+    2. Per-symbol halt / kill switch validation.
+    3. Maximum portfolio drawdown breach detection with auto-kill activation.
+    4. Price collar check ($\le 3\%$ deviation from current market price).
+    5. Reduce-only exit pass-through (bypasses new-risk limits to guarantee exit liquidity).
+    6. Max single order value and max symbol position clamping.
+    7. Buying power and gross portfolio leverage limit ($2.0\times$) enforcement.
+  - Thread-safe atomic kill switches for individual symbols and global trading halt.
+* **Configuration:** [`config/risk.json`](file:///d:/Documents/_MyStuff/Projects/quant_developer_learning/tc-trader/config/risk.json)
+  - Configurable risk thresholds (1% risk fraction, 2.0x max leverage, 5% max drawdown, 3% price collar).
+* **Plugin DLL Implementation:** [`modules/risk/risk_module.cpp`](file:///d:/Documents/_MyStuff/Projects/quant_developer_learning/tc-trader/modules/risk/risk_module.cpp)
+  - Exports `tc_get_module_vtable()` returning standard `TcModuleVTable`.
+  - Resolves `ITcRisk` interface table.
+* **Integration & Benchmark Test:** [`tests/test_risk.cpp`](file:///d:/Documents/_MyStuff/Projects/quant_developer_learning/tc-trader/tests/test_risk.cpp)
+  - Validates dynamic loading via `LoadLibrary`/`GetProcAddress`.
+  - Verified exact mathematical sizing (e.g. 200 shares long, 400 shares short on $100k capital).
+  - Verified pre-trade check rejections: max position clamping, gross leverage rejection, price collar rejection, symbol kill switch rejection, global kill switch rejection, and drawdown breach auto-kill.
+  - Verified reduce-only exits always approved.
+  - Achieved sustained evaluation throughput of **7.50 Million evals/sec** on 1,000,000 signals.
 
 ---
 
