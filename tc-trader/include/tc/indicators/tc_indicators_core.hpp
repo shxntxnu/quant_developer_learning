@@ -510,6 +510,8 @@ public:
         atr_.reset();
         bb_.reset();
         adx_.reset();
+        last_close_ = 0.0;
+        last_ts_ns_ = 0;
         bars_received_ = 0;
     }
 
@@ -527,6 +529,7 @@ public:
         bb_.update(close);
         adx_.update(high, low, close);
 
+        last_close_ = close;
         last_ts_ns_ = bar.ts_ns;
         bars_received_++;
     }
@@ -604,6 +607,8 @@ public:
         } else {
             out.adx = 0.0;
         }
+
+        out.last_close = last_close_;
     }
 
     [[nodiscard]] size_t bars_received() const noexcept { return bars_received_; }
@@ -618,6 +623,7 @@ private:
     IncrementalBollinger bb_;
     IncrementalADX adx_;
 
+    double last_close_{0.0};
     int64_t last_ts_ns_{0};
     size_t bars_received_{0};
 };

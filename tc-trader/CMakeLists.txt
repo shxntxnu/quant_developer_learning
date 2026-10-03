@@ -63,9 +63,24 @@ if(NOT MSVC)
 endif()
 add_dependencies(test_indicators tc_indicators)
 
+# Layer 2 Plugin DLL: tc_strategy
+add_library(tc_strategy SHARED
+    modules/strategy/strategy_module.cpp
+)
+target_include_directories(tc_strategy PRIVATE modules/strategy)
+target_compile_definitions(tc_strategy PRIVATE TC_EXPORTS)
+set_target_properties(tc_strategy PROPERTIES PREFIX "" OUTPUT_NAME "tc_strategy")
+
+add_executable(test_strategy tests/test_strategy.cpp)
+if(NOT MSVC)
+    target_link_libraries(test_strategy PRIVATE dl pthread)
+endif()
+add_dependencies(test_strategy tc_strategy)
+
 enable_testing()
 add_test(NAME TestTypes COMMAND test_types)
 add_test(NAME TestRingBuffer COMMAND test_ringbuffer)
 add_test(NAME TestJournal COMMAND test_journal)
 add_test(NAME TestPortfolio COMMAND test_portfolio)
 add_test(NAME TestIndicators COMMAND test_indicators)
+add_test(NAME TestStrategy COMMAND test_strategy)

@@ -1,0 +1,18 @@
+{
+  "adx_trend_threshold": 25.0,
+  "atr_vol_multiplier": 2.5,
+  "bb_bandwidth_threshold": 0.15,
+  "rsi_oversold": 30.0,
+  "rsi_overbought": 70.0,
+  "rsi_bull_min": 50.0,
+  "rsi_bear_max": 50.0,
+  "atr_stop_multiplier": 2.0,
+  "atr_target_multiplier": 3.0,
+  "max_holding_ns": 14400000000000,
+  "enable_trend": true,
+  "enable_mean_reversion": true,
+  "enable_trailing_stop": true,
+  "enable_take_profit": true,
+  "enable_ma_reversal": true,
+  "enable_max_holding": true
+}

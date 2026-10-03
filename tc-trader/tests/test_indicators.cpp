@@ -187,7 +187,9 @@ int main() {
 
     vtable->stop(handle);
     vtable->destroy(handle);
+#if !defined(_WIN32)
     DYN_CLOSE(lib);
+#endif
 
     std::cout << "\n=====================================================" << std::endl;
     std::cout << "    TC_INDICATORS PLUGIN TESTS PASSED COMPLETELY!    " << std::endl;

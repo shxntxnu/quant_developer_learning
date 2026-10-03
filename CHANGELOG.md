@@ -67,8 +67,31 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
   - Verified warmup progression: Bar 15 (RSI/ATR), Bar 20 (SMA20/EMA/BB), Bar 50 (SMA50/MACD/ADX - Full Warmup).
   - Verified mathematical bounds ($0 \le \text{RSI}, \text{ADX} \le 100$, $\text{BB}_{\text{lower}} \le \text{BB}_{\text{mid}} \le \text{BB}_{\text{upper}}$).
   - Achieved sustained streaming throughput of **14.41 Million bars/sec** on 1,000,000 synthetic bars.
+### Added - 2026-10-03: `tc_strategy` (Rule-Based Strategy Engine & Market Regime Classifier)
+* **Shared ABI Header:** [`include/tc/strategy/tc_strategy.h`](file:///d:/Documents/_MyStuff/Projects/quant_developer_learning/tc-trader/include/tc/strategy/tc_strategy.h)
+  - Defined `ITcStrategy` C ABI vtable containing `configure()`, `get_params()`, `set_params()`, `classify_regime()`, `on_snapshot()`, and `reset()`.
+  - Defined `TcMarketRegime` enum (`TC_REGIME_UNKNOWN`, `TC_REGIME_RANGING`, `TC_REGIME_TRENDING_BULL`, `TC_REGIME_TRENDING_BEAR`, `TC_REGIME_HIGH_VOLATILITY`).
+  - Defined `TcRuleId` enum (`TC_RULE_ENTRY_TREND_BULL`, `TC_RULE_ENTRY_TREND_BEAR`, `TC_RULE_ENTRY_MEAN_REV_LONG`, `TC_RULE_ENTRY_MEAN_REV_SHORT`, `TC_RULE_EXIT_TRAILING_STOP`, `TC_RULE_EXIT_TAKE_PROFIT`, `TC_RULE_EXIT_MA_REVERSAL`, `TC_RULE_EXIT_MAX_HOLDING`).
+  - Defined `TcStrategyParams` configuration struct for dynamic rules and thresholds.
+* **High-Performance Pure Function Engine:** [`modules/strategy/strategy_engine.hpp`](file:///d:/Documents/_MyStuff/Projects/quant_developer_learning/tc-trader/modules/strategy/strategy_engine.hpp)
+  - Evaluates `(TcIndicatorSnapshot, TcPositionView) -> TcSignal[]` synchronously on Thread T2 with strictly zero dynamic heap allocations.
+  - Zero I/O, zero network hops, and zero blocking on the hot path.
+  - Pre-allocated zero-allocation symbol state table tracking active positions, entry timestamps, entry prices, and high/low extremes.
+  - **Market Regime Classifier:** Categorizes market dynamics via ADX ($> 25$) and Bollinger bandwidth expansions.
+  - **Exit Rules Evaluator:** Evaluates open positions for ATR trailing stops, target profit takes, moving average reversals, and trade timeout stops.
+  - **Entry Rules Evaluator:** Evaluates trend-following golden/death crosses with RSI confirmation and mean-reversion boundary rejections with oversold/overbought RSI.
+* **Configuration:** [`config/rules.json`](file:///d:/Documents/_MyStuff/Projects/quant_developer_learning/tc-trader/config/rules.json)
+  - Configurable regime and rule parameters with JSON parser and hot-reload support.
+* **Plugin DLL Implementation:** [`modules/strategy/strategy_module.cpp`](file:///d:/Documents/_MyStuff/Projects/quant_developer_learning/tc-trader/modules/strategy/strategy_module.cpp)
+  - Exports `tc_get_module_vtable()` returning standard `TcModuleVTable`.
+  - Resolves `ITcStrategy` interface table.
+* **Integration & Benchmark Test:** [`tests/test_strategy.cpp`](file:///d:/Documents/_MyStuff/Projects/quant_developer_learning/tc-trader/tests/test_strategy.cpp)
+  - Validates dynamic loading via `LoadLibrary`/`GetProcAddress`.
+  - Verified all regime states, bull/bear trend entries, oversold/overbought mean reversion entries, trailing stops, profit targets, MA reversal exits, and timeout exits.
+  - Achieved sustained streaming throughput of **31.1 - 86.1 Million evals/sec** on 1,000,000 snapshots.
 
 ---
+
 
 ## [1.0.0] - Phase 1: Shared C ABI & Concurrency Foundation - 2026-10-02
 

@@ -268,7 +268,9 @@ int main() {
     // Cleanup
     vtable->stop(handle);
     vtable->destroy(handle);
+#if !defined(_WIN32)
     DYN_CLOSE(lib);
+#endif
 
     std::cout << "\n=====================================================" << std::endl;
     std::cout << "    TC_PORTFOLIO PLUGIN TESTS PASSED COMPLETELY!     " << std::endl;

@@ -7,5 +7,6 @@
   ],
   "clangd.fallbackFlags": [
     "-std=c++17"
-  ]
+  ],
+  "cmake.sourceDirectory": "D:/Documents/_MyStuff/Projects/quant_developer_learning/tc-trader"
 }

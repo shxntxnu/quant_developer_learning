@@ -90,6 +90,7 @@ typedef struct TcIndicatorSnapshot {
     double   bb_middle;            /* Middle Bollinger Band (20 SMA) */
     double   bb_lower;             /* Lower Bollinger Band (-2 sigma) */
     double   adx;                  /* 14-period Average Directional Index */
+    double   last_close;           /* Most recent bar close price */
 } TcIndicatorSnapshot;
 
 typedef enum TcSignalSide {
@@ -211,6 +212,9 @@ typedef struct TcPosition {
     TcPrice  unrealized_pnl;       /* Mark-to-market unrealized PnL */
     TcPrice  last_mark_px;         /* Price used for marking */
 } TcPosition;
+
+typedef struct TcPosition TcPositionView;
+
 
 typedef struct TcAccountView {
     uint32_t struct_size;          /* sizeof(TcAccountView) */

@@ -166,7 +166,9 @@ int main() {
 
     vtable->stop(handle);
     vtable->destroy(handle);
+#if !defined(_WIN32)
     DYN_CLOSE(lib);
+#endif
 
     // 5. Verify Files Persisted to Disk
     std::cout << std::endl << "--- Disk Persistence Verification ---" << std::endl;
