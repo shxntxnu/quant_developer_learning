@@ -4,6 +4,7 @@
       "name": "Win32-GCC",
       "includePath": [
         "${workspaceFolder}/**",
+        "${workspaceFolder}/tc-trader/include",
         "${workspaceFolder}/Algorithmic Trading Machine Learning Strategies/functions/include",
         "C:/TDM-GCC-64/include/**",
         "C:/TDM-GCC-64/lib/gcc/x86_64-w64-mingw32/10.3.0/include/**"

@@ -10,8 +10,25 @@
  * high-water mark, drawdown tracking, and automated reconciliation against broker statements.
  */
 
-#include "tc/tc_abi.h"
-#include "tc/tc_types.h"
+#include <stdint.h>
+#include <stddef.h>
+#include <stdbool.h>
+
+#if defined(__has_include)
+    #if __has_include("tc/tc_abi.h")
+        #include "tc/tc_abi.h"
+        #include "tc/tc_types.h"
+    #elif __has_include("../tc_abi.h")
+        #include "../tc_abi.h"
+        #include "../tc_types.h"
+    #else
+        #include "tc_abi.h"
+        #include "tc_types.h"
+    #endif
+#else
+    #include "tc/tc_abi.h"
+    #include "tc/tc_types.h"
+#endif
 
 #ifdef __cplusplus
 extern "C" {

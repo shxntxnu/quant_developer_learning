@@ -2,76 +2,106 @@
   {
     "directory": "D:/Documents/_MyStuff/Projects/quant_developer_learning/Algorithmic Trading Machine Learning Strategies/functions",
     "command": "C:/TDM-GCC-64/bin/g++.exe -Iinclude -DMATHLIB_EXPORTS -c src/MathLib.cpp -o bin/MathLib.o",
-    "file": "Algorithmic Trading Machine Learning Strategies/functions/src/MathLib.cpp"
+    "file": "D:/Documents/_MyStuff/Projects/quant_developer_learning/Algorithmic Trading Machine Learning Strategies/functions/src/MathLib.cpp"
   },
   {
     "directory": "D:/Documents/_MyStuff/Projects/quant_developer_learning/Algorithmic Trading Machine Learning Strategies/functions",
     "command": "C:/TDM-GCC-64/bin/g++.exe -Iinclude -DCALCULATEYTMYIELD_EXPORTS -c src/calculateYTMYield.cpp -o bin/calculateYTMYield.o",
-    "file": "Algorithmic Trading Machine Learning Strategies/functions/src/calculateYTMYield.cpp"
+    "file": "D:/Documents/_MyStuff/Projects/quant_developer_learning/Algorithmic Trading Machine Learning Strategies/functions/src/calculateYTMYield.cpp"
   },
   {
     "directory": "D:/Documents/_MyStuff/Projects/quant_developer_learning/Algorithmic Trading Machine Learning Strategies/functions",
     "command": "C:/TDM-GCC-64/bin/g++.exe -Iinclude -DCALCULATEZEROCOUPONYIELD_EXPORTS -c src/calculateZeroCouponYield.cpp -o bin/calculateZeroCouponYield.o",
-    "file": "Algorithmic Trading Machine Learning Strategies/functions/src/calculateZeroCouponYield.cpp"
+    "file": "D:/Documents/_MyStuff/Projects/quant_developer_learning/Algorithmic Trading Machine Learning Strategies/functions/src/calculateZeroCouponYield.cpp"
   },
   {
     "directory": "D:/Documents/_MyStuff/Projects/quant_developer_learning/Algorithmic Trading Machine Learning Strategies/functions",
     "command": "C:/TDM-GCC-64/bin/g++.exe -Iinclude -DCALCULATEADF_EXPORTS -c src/calculateADF.cpp -o bin/calculateADF.o",
-    "file": "Algorithmic Trading Machine Learning Strategies/functions/src/calculateADF.cpp"
+    "file": "D:/Documents/_MyStuff/Projects/quant_developer_learning/Algorithmic Trading Machine Learning Strategies/functions/src/calculateADF.cpp"
   },
   {
     "directory": "D:/Documents/_MyStuff/Projects/quant_developer_learning/Algorithmic Trading Machine Learning Strategies/functions",
     "command": "C:/TDM-GCC-64/bin/g++.exe -Iinclude -DCALCULATECOINTEGRATION_EXPORTS -c src/calculateCointegration.cpp -o bin/calculateCointegration.o",
-    "file": "Algorithmic Trading Machine Learning Strategies/functions/src/calculateCointegration.cpp"
+    "file": "D:/Documents/_MyStuff/Projects/quant_developer_learning/Algorithmic Trading Machine Learning Strategies/functions/src/calculateCointegration.cpp"
   },
   {
     "directory": "D:/Documents/_MyStuff/Projects/quant_developer_learning/Algorithmic Trading Machine Learning Strategies/functions",
     "command": "C:/TDM-GCC-64/bin/g++.exe -Iinclude -c main.cpp -o bin/main.o",
-    "file": "Algorithmic Trading Machine Learning Strategies/functions/main.cpp"
+    "file": "D:/Documents/_MyStuff/Projects/quant_developer_learning/Algorithmic Trading Machine Learning Strategies/functions/main.cpp"
   },
   {
     "directory": "D:/Documents/_MyStuff/Projects/quant_developer_learning/tc-trader",
     "command": "C:/TDM-GCC-64/bin/g++.exe -std=c++20 -O3 -Wall -Wextra -pthread -Iinclude -c tests/test_types.cpp -o bin/test_types.o",
-    "file": "tc-trader/tests/test_types.cpp"
+    "file": "D:/Documents/_MyStuff/Projects/quant_developer_learning/tc-trader/tests/test_types.cpp"
   },
   {
     "directory": "D:/Documents/_MyStuff/Projects/quant_developer_learning/tc-trader",
     "command": "C:/TDM-GCC-64/bin/g++.exe -std=c++20 -O3 -Wall -Wextra -pthread -Iinclude -c tests/test_ringbuffer.cpp -o bin/test_ringbuffer.o",
-    "file": "tc-trader/tests/test_ringbuffer.cpp"
+    "file": "D:/Documents/_MyStuff/Projects/quant_developer_learning/tc-trader/tests/test_ringbuffer.cpp"
   },
   {
     "directory": "D:/Documents/_MyStuff/Projects/quant_developer_learning/tc-trader",
     "command": "C:/TDM-GCC-64/bin/g++.exe -std=c++20 -O3 -Wall -Wextra -shared -DTC_EXPORTS -Iinclude -Imodules/journal -c modules/journal/journal_module.cpp -o bin/journal_module.o",
-    "file": "tc-trader/modules/journal/journal_module.cpp"
+    "file": "D:/Documents/_MyStuff/Projects/quant_developer_learning/tc-trader/modules/journal/journal_module.cpp"
+  },
+  {
+    "directory": "D:/Documents/_MyStuff/Projects/quant_developer_learning/tc-trader",
+    "command": "C:/TDM-GCC-64/bin/g++.exe -std=c++20 -O3 -Wall -Wextra -shared -DTC_EXPORTS -Iinclude -Imodules/journal -c modules/journal/async_writer.cpp -o bin/async_writer.o",
+    "file": "D:/Documents/_MyStuff/Projects/quant_developer_learning/tc-trader/modules/journal/async_writer.cpp"
+  },
+  {
+    "directory": "D:/Documents/_MyStuff/Projects/quant_developer_learning/tc-trader",
+    "command": "C:/TDM-GCC-64/bin/g++.exe -std=c++20 -O3 -Wall -Wextra -shared -DTC_EXPORTS -Iinclude -Imodules/journal -c modules/journal/rotating_file_sink.cpp -o bin/rotating_file_sink.o",
+    "file": "D:/Documents/_MyStuff/Projects/quant_developer_learning/tc-trader/modules/journal/rotating_file_sink.cpp"
+  },
+  {
+    "directory": "D:/Documents/_MyStuff/Projects/quant_developer_learning/tc-trader",
+    "command": "C:/TDM-GCC-64/bin/g++.exe -std=c++20 -O3 -Wall -Wextra -pthread -Iinclude -c tests/test_journal.cpp -o bin/test_journal.o",
+    "file": "D:/Documents/_MyStuff/Projects/quant_developer_learning/tc-trader/tests/test_journal.cpp"
   },
   {
     "directory": "D:/Documents/_MyStuff/Projects/quant_developer_learning/tc-trader",
     "command": "C:/TDM-GCC-64/bin/g++.exe -std=c++20 -O3 -Wall -Wextra -shared -DTC_EXPORTS -Iinclude -Imodules/portfolio -c modules/portfolio/portfolio_module.cpp -o bin/portfolio_module.o",
-    "file": "tc-trader/modules/portfolio/portfolio_module.cpp"
+    "file": "D:/Documents/_MyStuff/Projects/quant_developer_learning/tc-trader/modules/portfolio/portfolio_module.cpp"
+  },
+  {
+    "directory": "D:/Documents/_MyStuff/Projects/quant_developer_learning/tc-trader",
+    "command": "C:/TDM-GCC-64/bin/g++.exe -std=c++20 -O3 -Wall -Wextra -shared -DTC_EXPORTS -Iinclude -Imodules/portfolio -c modules/portfolio/position_book.cpp -o bin/position_book.o",
+    "file": "D:/Documents/_MyStuff/Projects/quant_developer_learning/tc-trader/modules/portfolio/position_book.cpp"
+  },
+  {
+    "directory": "D:/Documents/_MyStuff/Projects/quant_developer_learning/tc-trader",
+    "command": "C:/TDM-GCC-64/bin/g++.exe -std=c++20 -O3 -Wall -Wextra -pthread -Iinclude -c tests/test_portfolio.cpp -o bin/test_portfolio.o",
+    "file": "D:/Documents/_MyStuff/Projects/quant_developer_learning/tc-trader/tests/test_portfolio.cpp"
   },
   {
     "directory": "D:/Documents/_MyStuff/Projects/quant_developer_learning/tc-trader",
     "command": "C:/TDM-GCC-64/bin/g++.exe -std=c++20 -O3 -Wall -Wextra -shared -DTC_EXPORTS -Iinclude -Imodules/indicators -c modules/indicators/indicators_module.cpp -o bin/indicators_module.o",
-    "file": "tc-trader/modules/indicators/indicators_module.cpp"
+    "file": "D:/Documents/_MyStuff/Projects/quant_developer_learning/tc-trader/modules/indicators/indicators_module.cpp"
+  },
+  {
+    "directory": "D:/Documents/_MyStuff/Projects/quant_developer_learning/tc-trader",
+    "command": "C:/TDM-GCC-64/bin/g++.exe -std=c++20 -O3 -Wall -Wextra -pthread -Iinclude -c tests/test_indicators.cpp -o bin/test_indicators.o",
+    "file": "D:/Documents/_MyStuff/Projects/quant_developer_learning/tc-trader/tests/test_indicators.cpp"
   },
   {
     "directory": "D:/Documents/_MyStuff/Projects/quant_developer_learning/tc-trader",
     "command": "C:/TDM-GCC-64/bin/g++.exe -std=c++20 -O3 -Wall -Wextra -shared -DTC_EXPORTS -Iinclude -Imodules/strategy -c modules/strategy/strategy_module.cpp -o bin/strategy_module.o",
-    "file": "tc-trader/modules/strategy/strategy_module.cpp"
+    "file": "D:/Documents/_MyStuff/Projects/quant_developer_learning/tc-trader/modules/strategy/strategy_module.cpp"
   },
   {
     "directory": "D:/Documents/_MyStuff/Projects/quant_developer_learning/tc-trader",
     "command": "C:/TDM-GCC-64/bin/g++.exe -std=c++20 -O3 -Wall -Wextra -pthread -Iinclude -c tests/test_strategy.cpp -o bin/test_strategy.o",
-    "file": "tc-trader/tests/test_strategy.cpp"
+    "file": "D:/Documents/_MyStuff/Projects/quant_developer_learning/tc-trader/tests/test_strategy.cpp"
   },
   {
     "directory": "D:/Documents/_MyStuff/Projects/quant_developer_learning/tc-trader",
     "command": "C:/TDM-GCC-64/bin/g++.exe -std=c++20 -O3 -Wall -Wextra -shared -DTC_EXPORTS -Iinclude -Imodules/risk -c modules/risk/risk_module.cpp -o bin/risk_module.o",
-    "file": "tc-trader/modules/risk/risk_module.cpp"
+    "file": "D:/Documents/_MyStuff/Projects/quant_developer_learning/tc-trader/modules/risk/risk_module.cpp"
   },
   {
     "directory": "D:/Documents/_MyStuff/Projects/quant_developer_learning/tc-trader",
     "command": "C:/TDM-GCC-64/bin/g++.exe -std=c++20 -O3 -Wall -Wextra -pthread -Iinclude -c tests/test_risk.cpp -o bin/test_risk.o",
-    "file": "tc-trader/tests/test_risk.cpp"
+    "file": "D:/Documents/_MyStuff/Projects/quant_developer_learning/tc-trader/tests/test_risk.cpp"
   }
 ]

@@ -10,8 +10,25 @@
  * structures passed directly to tc_strategy for regime classification and rule evaluation.
  */
 
-#include "tc/tc_abi.h"
-#include "tc/tc_types.h"
+#include <stdint.h>
+#include <stddef.h>
+#include <stdbool.h>
+
+#if defined(__has_include)
+    #if __has_include("tc/tc_abi.h")
+        #include "tc/tc_abi.h"
+        #include "tc/tc_types.h"
+    #elif __has_include("../tc_abi.h")
+        #include "../tc_abi.h"
+        #include "../tc_types.h"
+    #else
+        #include "tc_abi.h"
+        #include "tc_types.h"
+    #endif
+#else
+    #include "tc/tc_abi.h"
+    #include "tc/tc_types.h"
+#endif
 
 #ifdef __cplusplus
 extern "C" {

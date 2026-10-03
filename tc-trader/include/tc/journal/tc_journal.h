@@ -12,7 +12,21 @@
  * (Thread T4: AsyncWriter) drains the queue and writes records to disk.
  */
 
-#include "tc/tc_abi.h"
+#include <stdint.h>
+#include <stddef.h>
+#include <stdbool.h>
+
+#if defined(__has_include)
+    #if __has_include("tc/tc_abi.h")
+        #include "tc/tc_abi.h"
+    #elif __has_include("../tc_abi.h")
+        #include "../tc_abi.h"
+    #else
+        #include "tc_abi.h"
+    #endif
+#else
+    #include "tc/tc_abi.h"
+#endif
 
 #ifdef __cplusplus
 extern "C" {
