@@ -91,6 +91,20 @@ if(NOT MSVC)
 endif()
 add_dependencies(test_risk tc_risk)
 
+# Layer 2 Plugin DLL: tc_marketdata
+add_library(tc_marketdata SHARED
+    modules/marketdata/marketdata_module.cpp
+)
+target_include_directories(tc_marketdata PRIVATE modules/marketdata)
+target_compile_definitions(tc_marketdata PRIVATE TC_EXPORTS)
+set_target_properties(tc_marketdata PROPERTIES PREFIX "" OUTPUT_NAME "tc_marketdata")
+
+add_executable(test_marketdata tests/test_marketdata.cpp)
+if(NOT MSVC)
+    target_link_libraries(test_marketdata PRIVATE dl pthread)
+endif()
+add_dependencies(test_marketdata tc_marketdata)
+
 enable_testing()
 add_test(NAME TestTypes COMMAND test_types)
 add_test(NAME TestRingBuffer COMMAND test_ringbuffer)
@@ -99,3 +113,5 @@ add_test(NAME TestPortfolio COMMAND test_portfolio)
 add_test(NAME TestIndicators COMMAND test_indicators)
 add_test(NAME TestStrategy COMMAND test_strategy)
 add_test(NAME TestRisk COMMAND test_risk)
+add_test(NAME TestMarketData COMMAND test_marketdata)
+

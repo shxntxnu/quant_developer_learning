@@ -118,6 +118,30 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
   - Verified reduce-only exits always approved.
   - Achieved sustained evaluation throughput of **7.50 Million evals/sec** on 1,000,000 signals.
 
+### Added - 2026-10-03: `tc_marketdata` (Tick Normalization, Outlier Filtering & Deterministic Bar Aggregation Module)
+* **Shared ABI Header:** [`include/tc/marketdata/tc_marketdata.h`](file:///d:/Documents/_MyStuff/Projects/quant_developer_learning/tc-trader/include/tc/marketdata/tc_marketdata.h)
+  - Defined `ITcMarketData` C ABI vtable containing `configure()`, `get_config()`, `set_config()`, `process_raw_tick()`, `process_tick()`, `flush_bar()`, `set_bar_sink()`, `get_feed_status()`, `get_stats()`, `reset_symbol()`, and `reset()`.
+  - Defined `TcRawTick` POD struct for external exchange/broker feed ingestion.
+  - Defined `TcMarketDataConfig` and `TcMarketDataStats` structs for runtime configuration and operational drop telemetry.
+  - Defined `TcFeedStatus` enum (`TC_FEED_UNKNOWN`, `TC_FEED_OK`, `TC_FEED_DEGRADED`, `TC_FEED_DISCONNECTED`).
+* **High-Performance Aggregation & Normalization Engine:** [`modules/marketdata/marketdata_engine.hpp`](file:///d:/Documents/_MyStuff/Projects/quant_developer_learning/tc-trader/modules/marketdata/marketdata_engine.hpp)
+  - Strictly zero heap allocations on the hot path via pre-allocated fixed-capacity `SymbolSlot` table.
+  - **Tick Normalization:** Converts raw floating-point prices and sizes into deterministic 64-bit integer fixed-point `TcTick` structs.
+  - **Integrity & Anomaly Filtering:** Real-time filtering of stale/inverted timestamps, non-positive prices, crossed-book conditions (`bid > ask`), and price outlier spikes ($> 10\%$ deviation from recent valid price).
+  - **Deterministic Time-Windowed Bar Aggregation:** Aggregates trade ticks into epoch-aligned OHLCV bars (e.g. 1-min, 5-min intervals).
+  - **128-Bit Overflow-Safe VWAP Accumulation:** Computes running bar VWAP using `__int128` integer turnover accumulation.
+  - **Feed Health Monitoring:** Evaluates inter-tick arrival latency against configurable heartbeat timeouts to flag degraded or stale market feeds.
+  - **Synchronous & Asynchronous Bar Emission:** Dual-path delivery via direct `bar_out` pointers and registered `TcBarCallback` sinks.
+* **Configuration:** [`config/marketdata.json`](file:///d:/Documents/_MyStuff/Projects/quant_developer_learning/tc-trader/config/marketdata.json)
+  - Configurable bar interval (default 300s), price deviation threshold (10%), stale timeout (5.0s), and filter flags.
+* **Plugin DLL Implementation:** [`modules/marketdata/marketdata_module.cpp`](file:///d:/Documents/_MyStuff/Projects/quant_developer_learning/tc-trader/modules/marketdata/marketdata_module.cpp)
+  - Exports `tc_get_module_vtable()` returning standard `TcModuleVTable`.
+  - Resolves `ITcMarketData` interface table.
+* **Integration & Benchmark Test:** [`tests/test_marketdata.cpp`](file:///d:/Documents/_MyStuff/Projects/quant_developer_learning/tc-trader/tests/test_marketdata.cpp)
+  - Validates dynamic loading via `LoadLibrary`/`GetProcAddress`.
+  - Verified tick normalization, timestamp filtering, outlier spike rejection, crossed-book drops, bar OHLCV and VWAP math, manual bar flushing, and real-time feed health status transitions.
+  - Achieved sustained hot-path throughput of **31.58 Million ticks/sec** on 2,000,000 raw ticks.
+
 ---
 
 

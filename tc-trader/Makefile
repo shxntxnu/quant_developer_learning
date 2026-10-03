@@ -14,18 +14,21 @@ ifeq ($(UNAME_S),Darwin)
     INDICATORS_LIB = $(BIN_DIR)/libtc_indicators.dylib
     STRATEGY_LIB = $(BIN_DIR)/libtc_strategy.dylib
     RISK_LIB = $(BIN_DIR)/libtc_risk.dylib
+    MARKETDATA_LIB = $(BIN_DIR)/libtc_marketdata.dylib
 else ifeq ($(UNAME_S),Linux)
     JOURNAL_LIB = $(BIN_DIR)/libtc_journal.so
     PORTFOLIO_LIB = $(BIN_DIR)/libtc_portfolio.so
     INDICATORS_LIB = $(BIN_DIR)/libtc_indicators.so
     STRATEGY_LIB = $(BIN_DIR)/libtc_strategy.so
     RISK_LIB = $(BIN_DIR)/libtc_risk.so
+    MARKETDATA_LIB = $(BIN_DIR)/libtc_marketdata.so
 else
     JOURNAL_LIB = $(BIN_DIR)/tc_journal.dll
     PORTFOLIO_LIB = $(BIN_DIR)/tc_portfolio.dll
     INDICATORS_LIB = $(BIN_DIR)/tc_indicators.dll
     STRATEGY_LIB = $(BIN_DIR)/tc_strategy.dll
     RISK_LIB = $(BIN_DIR)/tc_risk.dll
+    MARKETDATA_LIB = $(BIN_DIR)/tc_marketdata.dll
 endif
 
 JOURNAL_SRCS = $(MODULES_DIR)/journal/journal_module.cpp \
@@ -41,6 +44,8 @@ STRATEGY_SRCS = $(MODULES_DIR)/strategy/strategy_module.cpp
 
 RISK_SRCS = $(MODULES_DIR)/risk/risk_module.cpp
 
+MARKETDATA_SRCS = $(MODULES_DIR)/marketdata/marketdata_module.cpp
+
 TARGETS = $(BIN_DIR)/test_types \
           $(BIN_DIR)/test_ringbuffer \
           $(JOURNAL_LIB) \
@@ -52,7 +57,9 @@ TARGETS = $(BIN_DIR)/test_types \
           $(STRATEGY_LIB) \
           $(BIN_DIR)/test_strategy \
           $(RISK_LIB) \
-          $(BIN_DIR)/test_risk
+          $(BIN_DIR)/test_risk \
+          $(MARKETDATA_LIB) \
+          $(BIN_DIR)/test_marketdata
 
 .PHONY: all clean run_tests
 
@@ -103,6 +110,13 @@ $(RISK_LIB): $(RISK_SRCS) | $(BIN_DIR)
 $(BIN_DIR)/test_risk: $(TESTS_DIR)/test_risk.cpp $(RISK_LIB) | $(BIN_DIR)
 	$(CXX) $(CXXFLAGS) -o $@ $<
 
+# Layer 2 tc_marketdata Plugin Shared Library & Test
+$(MARKETDATA_LIB): $(MARKETDATA_SRCS) | $(BIN_DIR)
+	$(CXX) $(CXXFLAGS) $(SO_FLAGS) -DTC_EXPORTS -I$(MODULES_DIR)/marketdata -o $@ $(MARKETDATA_SRCS)
+
+$(BIN_DIR)/test_marketdata: $(TESTS_DIR)/test_marketdata.cpp $(MARKETDATA_LIB) | $(BIN_DIR)
+	$(CXX) $(CXXFLAGS) -o $@ $<
+
 run_tests: all
 	@echo "\n=== Running test_types ==="
 	@./$(BIN_DIR)/test_types
@@ -118,6 +132,9 @@ run_tests: all
 	@./$(BIN_DIR)/test_strategy
 	@echo "\n=== Running test_risk ==="
 	@./$(BIN_DIR)/test_risk
+	@echo "\n=== Running test_marketdata ==="
+	@./$(BIN_DIR)/test_marketdata
 
 clean:
 	rm -rf $(BIN_DIR) logs
+

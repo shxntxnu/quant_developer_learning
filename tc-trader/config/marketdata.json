@@ -1,0 +1,9 @@
+{
+  "bar_interval_sec": 300,
+  "max_price_deviation_pct": 0.10,
+  "stale_timeout_sec": 5.0,
+  "filter_stale_ticks": true,
+  "filter_outliers": true,
+  "filter_crossed_book": true,
+  "emit_partial_bars": false
+}
